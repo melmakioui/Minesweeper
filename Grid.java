@@ -1,7 +1,6 @@
 package ProjecteMinesweeper;
 
 import java.util.Random;
-import ProjecteMinesweeper.Square;
 
 public class Grid {
 
@@ -21,10 +20,10 @@ public class Grid {
     }
 
 
-    private void initSquares(){
+    private void initSquares() {
 
         for (int i = 0; i < squares.length; i++) {
-            for (int j = 0; j < squares[0].length ; j++) {
+            for (int j = 0; j < squares[0].length; j++) {
                 squares[i][j] = new Square();
             }
         }
@@ -37,8 +36,8 @@ public class Grid {
         int counter = 0;
 
         while (counter != squares.length + 1) {
-            x = randomMines.nextInt(squares[0].length);
-            y = randomMines.nextInt(squares.length);
+            x = randomMines.nextInt(squares[0].length -1);
+            y = randomMines.nextInt(squares.length -1);
 
             squares[y][x].putMine(true);
             counter++;
@@ -46,15 +45,36 @@ public class Grid {
     }
 
 
-
-    private void uncheckSquares(int x, int y){
+    private void uncheckSquares(int x, int y) {
 
         this.x = x;
         this.y = y;
 
 
+        if (squares[x][y].isUnchecked() && !squares[x][y].isMine()) {
+
+            
+
+        } else return;
 
     }
+
+
+    private void displayBombs() {
+
+        for (int i = 0; i < squares.length; i++) {
+            for (int j = 0; j < squares[0].length; j++) {
+
+                if (squares[i][j].isMine()) {
+                    squares[i][j].setStatus(BOMB);
+                }
+
+                System.out.print("[" + squares[i][j].getStatus() + "] ");
+            }
+            System.out.println();
+        }
+    }
+
 
     public void displayGrid() {
 
@@ -68,10 +88,6 @@ public class Grid {
             System.out.println();
         }
     }
-
-
-
-
 
 
 }
