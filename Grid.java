@@ -5,9 +5,12 @@ import ProjecteMinesweeper.Square;
 
 public class Grid {
 
+    private final char FLAG = 'F';
+    private final char UNCHEKED = ' ';
+    private final char BOMB = '*';
     private Square squares[][];
-    private int x;
-    private int y;
+    private int x = 0;
+    private int y = 0;
 
 
     public Grid() {
@@ -15,7 +18,6 @@ public class Grid {
 
         initSquares();
         generateMines();
-      //  generateMines();
     }
 
 
@@ -44,6 +46,16 @@ public class Grid {
     }
 
 
+
+    private void uncheckSquares(int x, int y){
+
+        this.x = x;
+        this.y = y;
+
+
+
+    }
+
     public void displayGrid() {
 
         int yNumbers = 1;
@@ -51,7 +63,7 @@ public class Grid {
         for (int i = 0; i < squares.length; i++) {
             System.out.print(yNumbers++ + "  ");
             for (int j = 0; j < squares[0].length; j++) {
-                System.out.print(" [" + squares[i][j].getStatus() + "] ");
+                System.out.print("[" + squares[i][j].getStatus() + "] ");
             }
             System.out.println();
         }
