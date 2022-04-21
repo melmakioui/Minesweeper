@@ -14,10 +14,8 @@ public class InputOutput {
 
     public static int selectOption() {
 
-
         int option = 0;
         chooseOptionText();
-
         option = input.nextInt();
 
         return validateOption(option);

@@ -4,13 +4,15 @@ import ProjecteMinesweeper.InputOutput.InputOutput;
 
 public class Game {
 
+    private int x;
+    private int y;
     private boolean win = false;
     private boolean lost = false;
     private int option = 0;
     private Grid grid;
 
 
-    public Game() {
+    public Game(Grid grid) {
         this.grid = new Grid();
 
         initGame();
@@ -32,17 +34,18 @@ public class Game {
 
     private void selectedOption() {
 
+        x = InputOutput.selectPositionXY();
+        y = InputOutput.selectPositionXY();
+
         switch (option) {
             case 1:
-                InputOutput.selectPositionXY();
-                //metode on haura de desmarcar caselles.
+
                 break;
             case 2:
-                InputOutput.selectPositionXY();
-                //metode on haura de insertar una bandera
+                //
                 break;
             case 3:
-                //metode on haure de llevar una bandera
+                //
                 break;
         }
     }
