@@ -1,9 +1,9 @@
 package ProjecteMinesweeper;
 
-import java.util.Random;
 
 public class Square {
 
+    private char status = '-';
     private boolean unchecked = false;
     private boolean marked = false; //"flag"
     private boolean mine = false;
@@ -12,15 +12,11 @@ public class Square {
 
     public Square(){
 
-
     }
 
 
 
-
     //Getters - Setters
-
-
     public boolean isUnchecked() {
         return unchecked;
     }
@@ -51,5 +47,13 @@ public class Square {
 
     public void setMinesAround(int minesAround) {
         this.minesAround = minesAround;
+    }
+
+    public char getStatus() {
+        return status;
+    }
+
+    public void setStatus(char status) {
+        this.status = status;
     }
 }
