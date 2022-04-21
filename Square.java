@@ -3,17 +3,19 @@ package ProjecteMinesweeper;
 
 public class Square {
 
-    private char status = '-';
-    private boolean unchecked = false;
-    private boolean marked = false; //"flag"
-    private boolean mine = false;
+    private char status = '?';
+    private boolean unchecked;
+    private boolean marked; //"flag"
+    private boolean mine;
     private int minesAround;
 
 
     public Square(){
+        this.unchecked = false;
+        this.marked = false;
+        this.mine = false;
 
     }
-
 
 
     //Getters - Setters

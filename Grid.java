@@ -53,7 +53,7 @@ public class Grid {
 
         if (squares[x][y].isUnchecked() && !squares[x][y].isMine()) {
 
-            
+
 
         } else return;
 
