@@ -49,7 +49,7 @@ public class Square {
     }
 
     public void setMinesAround(int minesAround) {
-        this.minesAround += minesAround;
+        this.minesAround = minesAround;
     }
 
     public char getStatus() {

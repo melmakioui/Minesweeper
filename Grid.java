@@ -10,11 +10,11 @@ public class Grid {
     private Square squares[][];
     private int x = 0;
     private int y = 0;
+    private int mines = 0;
 
 
     public Grid() {
         squares = new Square[10][10];
-
         initSquares();
         generateMines();
     }
@@ -45,40 +45,62 @@ public class Grid {
     }
 
 
-
-    public void uncheckSquares(int x, int y) {
+    public boolean checkCoordinates(int x, int y) {
 
 
         this.x = x;
         this.y = y;
 
+
         if (squares[x][y].isMine()) { //lost
-            return;
+            return true;
         }
 
+        if (!squares[x][y].isUnchecked()) {
+            uncheckSquares();
+        }
 
-        checkMinesArround();
+        return false;
 
     }
 
 
-    private void checkMinesArround(){
+    private void uncheckSquares() {
+
+        for (int i = y; i < squares[0].length; i++) {
+            if (!squares[x][i].isMine()) {
+                if (checkMinesArround()) {
+                    break;
+                }
+                squares[x][i].uncheckSquare(true);
+                squares[x][i].setStatus(UNCHEKED);
+            }
+        }
+
+
+    }
+
+
+    private boolean checkMinesArround() { //cuenta minas alrededor
+
+        mines = 0;
 
         for (int row = -1; row <= 1; row++) {
-            if (isValidRow(x,row)) {
+            if (isValidRow(x, row)) {
                 for (int col = -1; col <= 1; col++) {
-                    if (isValidColumn(x,y,row,col)) {
+                    if (isValidColumn(x, y, row, col)) {
                         if (squares[x + row][y + col].isMine()) {
-                            updateGrid(x,y,row,col);
+                            updateGrid(x, y, row, col);
                         }
                     }
                 }
             }
         }
+        return mines > 0;
     }
 
 
-    private boolean isValidRow(int x, int row){
+    private boolean isValidRow(int x, int row) {
 
         return ((x + row >= 0) && (x + row < squares.length));
     }
@@ -90,15 +112,14 @@ public class Grid {
     }
 
 
-    private void updateGrid(int x, int y, int row, int col){
+    private void updateGrid(int x, int y, int row, int col) {
 
-        squares[x + row][y + col].setMinesAround(1);
-        squares[x + row][y + col].setStatus( Character.forDigit(squares[x + row][y + col].getMinesAround(),10));
+        squares[this.x][this.y].setMinesAround(++mines);
+        squares[this.x][this.y].setStatus(Character.forDigit(squares[x + row][y + col].getMinesAround(), 10));
     }
 
 
-
-    private void displayBombs() {
+    public void displayBombs() {
 
         for (int i = 0; i < squares.length; i++) {
             for (int j = 0; j < squares[0].length; j++) {
