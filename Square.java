@@ -3,7 +3,7 @@ package ProjecteMinesweeper;
 
 public class Square {
 
-    private char status = '?';
+    private char status = '-';
     private boolean unchecked;
     private boolean marked; //"flag"
     private boolean mine;
@@ -14,6 +14,7 @@ public class Square {
         this.unchecked = false;
         this.marked = false;
         this.mine = false;
+        this.minesAround = 0;
 
     }
 
@@ -48,7 +49,7 @@ public class Square {
     }
 
     public void setMinesAround(int minesAround) {
-        this.minesAround = minesAround;
+        this.minesAround += minesAround;
     }
 
     public char getStatus() {

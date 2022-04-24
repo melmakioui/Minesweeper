@@ -36,8 +36,8 @@ public class Grid {
         int counter = 0;
 
         while (counter != squares.length + 1) {
-            x = randomMines.nextInt(squares[0].length -1);
-            y = randomMines.nextInt(squares.length -1);
+            x = randomMines.nextInt(squares[0].length - 1);
+            y = randomMines.nextInt(squares.length - 1);
 
             squares[y][x].putMine(true);
             counter++;
@@ -45,19 +45,57 @@ public class Grid {
     }
 
 
-    private void uncheckSquares(int x, int y) {
+
+    public void uncheckSquares(int x, int y) {
+
 
         this.x = x;
         this.y = y;
 
+        if (squares[x][y].isMine()) { //lost
+            return;
+        }
 
-        if (squares[x][y].isUnchecked() && !squares[x][y].isMine()) {
 
-
-
-        } else return;
+        checkMinesArround();
 
     }
+
+
+    private void checkMinesArround(){
+
+        for (int row = -1; row <= 1; row++) {
+            if (isValidRow(x,row)) {
+                for (int col = -1; col <= 1; col++) {
+                    if (isValidColumn(x,y,row,col)) {
+                        if (squares[x + row][y + col].isMine()) {
+                            updateGrid(x,y,row,col);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private boolean isValidRow(int x, int row){
+
+        return ((x + row >= 0) && (x + row < squares.length));
+    }
+
+
+    private boolean isValidColumn(int x, int y, int row, int col) {
+
+        return (y + col >= 0) && (y + col < squares[x + row].length) && (!(row == 0 && col == 0));
+    }
+
+
+    private void updateGrid(int x, int y, int row, int col){
+
+        squares[x + row][y + col].setMinesAround(1);
+        squares[x + row][y + col].setStatus( Character.forDigit(squares[x + row][y + col].getMinesAround(),10));
+    }
+
 
 
     private void displayBombs() {
@@ -83,7 +121,12 @@ public class Grid {
         for (int i = 0; i < squares.length; i++) {
             System.out.print(yNumbers++ + "  ");
             for (int j = 0; j < squares[0].length; j++) {
-                System.out.print("[" + squares[i][j].getStatus() + "] ");
+
+                if (squares[i][j].getMinesAround() != 0) {
+                    System.out.print("[" + squares[i][j].getMinesAround() + "] ");
+                } else System.out.print("[" + squares[i][j].getStatus() + "] ");
+
+
             }
             System.out.println();
         }
