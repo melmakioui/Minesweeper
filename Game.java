@@ -6,13 +6,12 @@ public class Game {
 
     private int x;
     private int y;
-    private boolean win = false;
     private boolean lost = false;
     private int option = 0;
     private Grid grid;
 
 
-    public Game(Grid grid) {
+    public Game() {
         this.grid = new Grid();
 
         initGame();
@@ -22,15 +21,14 @@ public class Game {
     private void initGame() {
 
         do {
-            option = 0;
+            grid.displayGrid();
             option = InputOutput.selectOption();
             selectedOption();
 
-
-        } while (!win && !lost);
-
+        } while (!lost);
 
     }
+
 
     private void selectedOption() {
 
@@ -39,7 +37,10 @@ public class Game {
 
         switch (option) {
             case 1:
-
+                if (grid.checkCoordinates(x,y)){
+                    lost = true;
+                    grid.displayBombs();
+                }
                 break;
             case 2:
                 //
@@ -49,6 +50,5 @@ public class Game {
                 break;
         }
     }
-
 
 }

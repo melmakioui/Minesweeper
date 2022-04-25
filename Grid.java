@@ -1,5 +1,7 @@
 package ProjecteMinesweeper;
 
+import ProjecteMinesweeper.InputOutput.InputOutput;
+
 import java.util.Random;
 
 public class Grid {
@@ -47,7 +49,6 @@ public class Grid {
 
     public boolean checkCoordinates(int x, int y) {
 
-
         this.x = x;
         this.y = y;
 
@@ -56,10 +57,16 @@ public class Grid {
             return true;
         }
 
-        if (!squares[x][y].isUnchecked()) {
-            uncheckSquares();
+
+        if (squares[x][y].isUnchecked()) {
+            System.out.println("THIS POSITION IS ALREADY UNCHECKED");
+            while (squares[x][y].isUnchecked()) {
+                this.x = InputOutput.selectPositionXY();
+                this.y = InputOutput.selectPositionXY();
+            }
         }
 
+        uncheckSquares(); //Not working
         return false;
 
     }
@@ -90,7 +97,7 @@ public class Grid {
                 for (int col = -1; col <= 1; col++) {
                     if (isValidColumn(x, y, row, col)) {
                         if (squares[x + row][y + col].isMine()) {
-                            updateGrid(x, y, row, col);
+                            updateSquare(x, y, row, col);
                         }
                     }
                 }
@@ -112,7 +119,7 @@ public class Grid {
     }
 
 
-    private void updateGrid(int x, int y, int row, int col) {
+    private void updateSquare(int x, int y, int row, int col) {
 
         squares[this.x][this.y].setMinesAround(++mines);
         squares[this.x][this.y].setStatus(Character.forDigit(squares[x + row][y + col].getMinesAround(), 10));
