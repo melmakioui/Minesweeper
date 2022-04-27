@@ -4,14 +4,14 @@ package ProjecteMinesweeper;
 public class Cell {
 
     private char status = '-';
-    private boolean unchecked;
+    private boolean uncovered;
     private boolean marked; //"flag"
     private boolean mine;
     private int minesAround;
 
 
     public Cell(){
-        this.unchecked = false;
+        this.uncovered = false;
         this.marked = false;
         this.mine = false;
         this.minesAround = 0;
@@ -20,19 +20,19 @@ public class Cell {
 
 
     //Getters - Setters
-    public boolean isUnchecked() {
-        return unchecked;
+    public boolean isUncovered() {
+        return uncovered;
     }
 
-    public void uncheckSquare(boolean unchecked) {
-        this.unchecked = unchecked;
+    public void uncoverCell(boolean unchecked) {
+        this.uncovered = unchecked;
     }
 
     public boolean isMarked() {
         return marked;
     }
 
-    public void markSquare(boolean marked) {
+    public void markCell(boolean marked) {
         this.marked = marked;
     }
 
@@ -52,11 +52,11 @@ public class Cell {
         this.minesAround = minesAround;
     }
 
-    public char getStatus() {
+    public char getCellStatus() {
         return status;
     }
 
-    public void setStatus(char status) {
+    public void setCellStatus(char status) {
         this.status = status;
     }
 }

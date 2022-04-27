@@ -20,10 +20,9 @@ public class Game {
 
     private void initGame() {
 
+
         do {
-            //grid.displayGrid();
-            grid.displayNumbers();
-            grid.displayBombs();
+            grid.displayGrid();
             option = InputOutput.selectOption();
             selectedOption();
 
@@ -33,7 +32,6 @@ public class Game {
 
 
     private void selectedOption() {
-
         x = InputOutput.selectPositionXY();
         y = InputOutput.selectPositionXY();
 
