@@ -21,7 +21,9 @@ public class Game {
     private void initGame() {
 
         do {
-            grid.displayGrid();
+            //grid.displayGrid();
+            grid.displayNumbers();
+            grid.displayBombs();
             option = InputOutput.selectOption();
             selectedOption();
 

@@ -1,7 +1,7 @@
 package ProjecteMinesweeper;
 
 
-public class Square {
+public class Cell {
 
     private char status = '-';
     private boolean unchecked;
@@ -10,7 +10,7 @@ public class Square {
     private int minesAround;
 
 
-    public Square(){
+    public Cell(){
         this.unchecked = false;
         this.marked = false;
         this.mine = false;

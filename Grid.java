@@ -9,24 +9,30 @@ public class Grid {
     private final char FLAG = 'F';
     private final char UNCHEKED = ' ';
     private final char BOMB = '*';
-    private Square squares[][];
-    private int x = 0;
-    private int y = 0;
-    private int mines = 0;
+
+    private Cell cells[][];
+    private int x;
+    private int y;
+    private int minesAround;
 
 
     public Grid() {
-        squares = new Square[10][10];
-        initSquares();
+        this.cells = new Cell[10][10];
+        this.x = 0;
+        this.y = 0;
+        this.minesAround = 0;
+
+        initCells();
         generateMines();
+        countMinesAround();
     }
 
 
-    private void initSquares() {
+    private void initCells() {
 
-        for (int i = 0; i < squares.length; i++) {
-            for (int j = 0; j < squares[0].length; j++) {
-                squares[i][j] = new Square();
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[0].length; j++) {
+                cells[i][j] = new Cell();
             }
         }
 
@@ -37,105 +43,116 @@ public class Grid {
 
         int counter = 0;
 
-        while (counter != squares.length + 1) {
-            x = randomMines.nextInt(squares[0].length - 1);
-            y = randomMines.nextInt(squares.length - 1);
+        while (counter != cells.length + 1) {
+            x = randomMines.nextInt(cells[0].length - 1);
+            y = randomMines.nextInt(cells.length - 1);
 
-            squares[y][x].putMine(true);
+            cells[y][x].putMine(true);
             counter++;
         }
     }
 
 
+    private void countMinesAround(){
+
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[0].length; j++) {
+                if (checkMinesArround(i,j) && !cells[i][j].isMine()){
+                    cells[i][j].setMinesAround(minesAround);
+                }
+            }
+        }
+
+    }
+
+
+
+    private boolean checkMinesArround(int x, int y) {
+
+        minesAround = 0;
+
+        for (int row = -1; row <= 1; row++) {
+            if (isValidRow(x, row)) {
+                for (int col = -1; col <= 1; col++) {
+                    if (isValidColumn(x, y, row, col)) {
+                        if (cells[x + row][y + col].isMine()) {
+                            minesAround++;
+                        }
+                    }
+                }
+            }
+        }
+        return minesAround > 0;
+    }
+
+
+    private boolean isValidRow(int x, int row) {
+
+        return ((x + row >= 0) && (x + row < cells.length));
+    }
+
+
+    private boolean isValidColumn(int x, int y, int row, int col) {
+
+        return (y + col >= 0)
+                && (y + col < cells[x + row].length)
+                && (!(row == 0 && col == 0));
+    }
+
+
+
+
+
+    //refactorizar metodo
     public boolean checkCoordinates(int x, int y) {
 
         this.x = x;
         this.y = y;
 
 
-        if (squares[x][y].isMine()) { //lost
+        if (cells[x][y].isMine()) {
             return true;
         }
 
 
-        if (squares[x][y].isUnchecked()) {
+        if (cells[x][y].isUnchecked()) {
             System.out.println("THIS POSITION IS ALREADY UNCHECKED");
-            while (squares[x][y].isUnchecked()) {
+            while (cells[x][y].isUnchecked()) {
                 this.x = InputOutput.selectPositionXY();
                 this.y = InputOutput.selectPositionXY();
             }
         }
 
-        uncheckSquares(); //Not working
         return false;
 
     }
 
 
-    private void uncheckSquares() {
-
-        for (int i = y; i < squares[0].length; i++) {
-            if (!squares[x][i].isMine()) {
-                if (checkMinesArround()) {
-                    break;
-                }
-                squares[x][i].uncheckSquare(true);
-                squares[x][i].setStatus(UNCHEKED);
-            }
-        }
-
-
-    }
-
-
-    private boolean checkMinesArround() { //cuenta minas alrededor
-
-        mines = 0;
-
-        for (int row = -1; row <= 1; row++) {
-            if (isValidRow(x, row)) {
-                for (int col = -1; col <= 1; col++) {
-                    if (isValidColumn(x, y, row, col)) {
-                        if (squares[x + row][y + col].isMine()) {
-                            updateSquare(x, y, row, col);
-                        }
-                    }
-                }
-            }
-        }
-        return mines > 0;
-    }
-
-
-    private boolean isValidRow(int x, int row) {
-
-        return ((x + row >= 0) && (x + row < squares.length));
-    }
-
-
-    private boolean isValidColumn(int x, int y, int row, int col) {
-
-        return (y + col >= 0) && (y + col < squares[x + row].length) && (!(row == 0 && col == 0));
-    }
-
-
-    private void updateSquare(int x, int y, int row, int col) {
-
-        squares[this.x][this.y].setMinesAround(++mines);
-        squares[this.x][this.y].setStatus(Character.forDigit(squares[x + row][y + col].getMinesAround(), 10));
-    }
 
 
     public void displayBombs() {
 
-        for (int i = 0; i < squares.length; i++) {
-            for (int j = 0; j < squares[0].length; j++) {
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[0].length; j++) {
 
-                if (squares[i][j].isMine()) {
-                    squares[i][j].setStatus(BOMB);
+                if (cells[i][j].isMine()) {
+                    cells[i][j].setStatus(BOMB);
                 }
+                System.out.print("\033[0;31m" + "[" + cells[i][j].getStatus() + "] ");
+            }
+            System.out.println();
+        }
+    }
 
-                System.out.print("[" + squares[i][j].getStatus() + "] ");
+
+    public void displayNumbers(){
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[0].length; j++) {
+
+                if (cells[i][j].isMine()) {
+                    cells[i][j].setStatus(BOMB);
+                }
+                System.out.print( "[" + cells[i][j].getMinesAround() + "] ");
             }
             System.out.println();
         }
@@ -146,14 +163,13 @@ public class Grid {
 
         int yNumbers = 1;
 
-        for (int i = 0; i < squares.length; i++) {
+        for (int i = 0; i < cells.length; i++) {
             System.out.print(yNumbers++ + "  ");
-            for (int j = 0; j < squares[0].length; j++) {
+            for (int j = 0; j < cells[0].length; j++) {
 
-                if (squares[i][j].getMinesAround() != 0) {
-                    System.out.print("[" + squares[i][j].getMinesAround() + "] ");
-                } else System.out.print("[" + squares[i][j].getStatus() + "] ");
-
+                if (cells[i][j].getMinesAround() != 0) {
+                    System.out.print("[" + cells[i][j].getMinesAround() + "] ");
+                } else System.out.print("[" + cells[i][j].getStatus() + "] ");
 
             }
             System.out.println();
