@@ -60,6 +60,7 @@ public class Grid {
             for (int j = 0; j < cells[0].length; j++) {
                 if (checkMinesArround(i, j) && !cells[i][j].isMine()) {
                     cells[i][j].setMinesAround(minesAround);
+                    //cells[i][j].setCellStatus(Character.forDigit(cells[i][j].getMinesAround(),10));
                 }
             }
         }
@@ -144,21 +145,26 @@ public class Grid {
             return;
         }
 
-        for (int adjx = x; adjx < cells.length; adjx++) {
-            for (int adjy = y; adjy < cells[0].length; adjy++) {
-                uncoverBrotherCells(adjx + 1, adjy);
+
+        int dx[] = {-1, 1, 0, 0, -1, -1, 1, 1};
+        int dy[] = {0, 0, -1, 1, -1, 1, -1, 1};
+
+        for (int i = 0; i < 8; i++) {
+            int adjx = x+dx[i];
+            int adjy = x+dy[i];
+
+            uncoverBrotherCells(adjx,adjy);
+        }
+/*              uncoverBrotherCells(adjx + 1, adjy);
                 uncoverBrotherCells(adjx - 1, adjy);
                 uncoverBrotherCells(adjx, adjy - 1);
                 uncoverBrotherCells(adjx, adjy + 1);
                 uncoverBrotherCells(adjx - 1, adjy - 1);
                 uncoverBrotherCells(adjx - 1, adjy + 1);
                 uncoverBrotherCells(adjx + 1, adjy - 1);
-                uncoverBrotherCells(adjx + 1, adjy + 1);
-
-            }
-
-        }
+                uncoverBrotherCells(adjx + 1, adjy + 1);*/
     }
+
 
 
     private boolean validCoordinates(int x, int y) {
@@ -206,8 +212,8 @@ public class Grid {
                 }
 
                 if (cells[i][j].isUncovered()) {
-                    cells[x][y].setCellStatus(UNCOVERED);
                     System.out.print("[" + cells[i][j].getCellStatus() + "] ");
+                    cells[x][y].setCellStatus(UNCOVERED);
                     continue;
                 }
 
