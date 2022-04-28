@@ -48,7 +48,7 @@ public class Grid {
             x = randomMines.nextInt(cells[0].length - 1);
             y = randomMines.nextInt(cells.length - 1);
 
-            cells[y][x].putMine(true);
+            cells[x][y].putMine(true);
             counter++;
         }
     }
@@ -58,7 +58,7 @@ public class Grid {
 
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
-                if (checkMinesArround(i, j) && !cells[i][j].isMine()) {
+                if (hasMinesAround(i, j) && !cells[i][j].isMine()) {
                     cells[i][j].setMinesAround(minesAround);
                     //cells[i][j].setCellStatus(Character.forDigit(cells[i][j].getMinesAround(),10));
                 }
@@ -67,7 +67,7 @@ public class Grid {
     }
 
 
-    private boolean checkMinesArround(int x, int y) {
+    private boolean hasMinesAround(int x, int y) {
 
         minesAround = 0;
 
@@ -103,9 +103,8 @@ public class Grid {
     //refactorizar metodo
     public boolean checkCoordinates(int x, int y) {
 
-        this.x = x;
+        this.x = y;
         this.y = y;
-
 
         if (cells[x][y].isMine()) {
             return true;
@@ -121,7 +120,11 @@ public class Grid {
         }
 
 
-        uncoverBrotherCells(x, y);
+        if (!cells[x][y].isUncovered()) {
+            uncoverBrotherCells(x, y);
+        }
+
+
 
         return false;
 
@@ -139,9 +142,9 @@ public class Grid {
         }
 
         cells[x][y].uncoverCell(true);
+        cells[x][y].setCellStatus(UNCOVERED);
 
-
-        if (cells[x][y].getMinesAround() != 0) {
+        if (cells[x][y].getMinesAround() >= 1) {
             return;
         }
 
@@ -151,18 +154,10 @@ public class Grid {
 
         for (int i = 0; i < 8; i++) {
             int adjx = x+dx[i];
-            int adjy = x+dy[i];
+            int adjy = y+dy[i];
 
             uncoverBrotherCells(adjx,adjy);
         }
-/*              uncoverBrotherCells(adjx + 1, adjy);
-                uncoverBrotherCells(adjx - 1, adjy);
-                uncoverBrotherCells(adjx, adjy - 1);
-                uncoverBrotherCells(adjx, adjy + 1);
-                uncoverBrotherCells(adjx - 1, adjy - 1);
-                uncoverBrotherCells(adjx - 1, adjy + 1);
-                uncoverBrotherCells(adjx + 1, adjy - 1);
-                uncoverBrotherCells(adjx + 1, adjy + 1);*/
     }
 
 
@@ -206,22 +201,21 @@ public class Grid {
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
 
-                if (cells[i][j].isUncovered() && cells[i][j].getMinesAround() > 0) {
+                if (cells[i][j].isUncovered() && cells[i][j].getMinesAround() >= 1) {
                     System.out.print("[" + cells[i][j].getMinesAround() + "] ");
                     continue;
                 }
 
                 if (cells[i][j].isUncovered()) {
                     System.out.print("[" + cells[i][j].getCellStatus() + "] ");
-                    cells[x][y].setCellStatus(UNCOVERED);
                     continue;
                 }
 
-                if (cells[i][j].isMarked()) {
+/*                if (cells[i][j].isMarked()) {
                     cells[i][j].setCellStatus(FLAG);
                     System.out.print("[" + cells[i][j].getCellStatus() + "] ");
                     continue;
-                }
+                }*/
 
                 System.out.print("[" + cells[i][j].getCellStatus() + "] ");
             }
