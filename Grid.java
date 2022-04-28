@@ -11,16 +11,12 @@ public class Grid {
     private final char BOMB = '*';
 
     private Cell cells[][];
-    private int x;
-    private int y;
-    private int minesAround;
+    private int mineCounter;
 
 
     public Grid() {
         this.cells = new Cell[10][10];
-        this.x = 0;
-        this.y = 0;
-        this.minesAround = 0;
+        this.mineCounter = 0;
 
         initCells();
         generateMines();
@@ -43,6 +39,8 @@ public class Grid {
         Random randomMines = new Random();
 
         int counter = 0;
+        int x;
+        int y;
 
         while (counter != cells.length + 1) {
             x = randomMines.nextInt(cells[0].length - 1);
@@ -59,8 +57,7 @@ public class Grid {
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
                 if (hasMinesAround(i, j) && !cells[i][j].isMine()) {
-                    cells[i][j].setMinesAround(minesAround);
-                    //cells[i][j].setCellStatus(Character.forDigit(cells[i][j].getMinesAround(),10));
+                    cells[i][j].setMinesAround(mineCounter);
                 }
             }
         }
@@ -69,20 +66,20 @@ public class Grid {
 
     private boolean hasMinesAround(int x, int y) {
 
-        minesAround = 0;
+        mineCounter = 0;
 
         for (int row = -1; row <= 1; row++) {
             if (isValidRow(x, row)) {
                 for (int col = -1; col <= 1; col++) {
                     if (isValidColumn(x, y, row, col)) {
                         if (cells[x + row][y + col].isMine()) {
-                            minesAround++;
+                            mineCounter++;
                         }
                     }
                 }
             }
         }
-        return minesAround > 0;
+        return mineCounter > 0;
     }
 
 
@@ -100,11 +97,7 @@ public class Grid {
     }
 
 
-    //refactorizar metodo
     public boolean checkCoordinates(int x, int y) {
-
-        this.x = y;
-        this.y = y;
 
         if (cells[x][y].isMine()) {
             return true;
@@ -114,21 +107,19 @@ public class Grid {
         if (cells[x][y].isUncovered()) {
             System.out.println("THIS POSITION IS ALREADY UNCHECKED");
             while (cells[x][y].isUncovered()) {
-                this.x = InputOutput.selectPositionXY();
-                this.y = InputOutput.selectPositionXY();
+                x = InputOutput.selectPositionXY();
+                y = InputOutput.selectPositionXY();
             }
         }
-
 
         if (!cells[x][y].isUncovered()) {
             uncoverBrotherCells(x, y);
         }
 
-
-
         return false;
-
     }
+
+
 
 
     private void uncoverBrotherCells(int x, int y) {
@@ -148,18 +139,16 @@ public class Grid {
             return;
         }
 
-
         int dx[] = {-1, 1, 0, 0, -1, -1, 1, 1};
         int dy[] = {0, 0, -1, 1, -1, 1, -1, 1};
 
         for (int i = 0; i < 8; i++) {
-            int adjx = x+dx[i];
-            int adjy = y+dy[i];
+            int adjx = x + dx[i];
+            int adjy = y + dy[i];
 
-            uncoverBrotherCells(adjx,adjy);
+            uncoverBrotherCells(adjx, adjy);
         }
     }
-
 
 
     private boolean validCoordinates(int x, int y) {
@@ -176,20 +165,6 @@ public class Grid {
                     cells[i][j].setCellStatus(BOMB);
                 }
                 System.out.print("\033[0;31m" + "[" + cells[i][j].getCellStatus() + "] ");
-            }
-            System.out.println();
-        }
-    }
-
-
-    public void displayNumbers() {
-        for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[0].length; j++) {
-
-                if (cells[i][j].isMine()) {
-                    cells[i][j].setCellStatus(BOMB);
-                }
-                System.out.print("[" + cells[i][j].getMinesAround() + "] ");
             }
             System.out.println();
         }

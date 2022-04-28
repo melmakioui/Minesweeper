@@ -1,7 +1,5 @@
 package ProjecteMinesweeper.InputOutput;
 
-import ProjecteMinesweeper.Game;
-
 import java.util.Scanner;
 
 public class InputOutput {

@@ -1,6 +1,6 @@
 package ProjecteMinesweeper;
 
-public class Main {
+public class Start {
 
     public static void main(String[] args) {
 
