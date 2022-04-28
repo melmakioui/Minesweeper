@@ -33,10 +33,11 @@ public class InputOutput {
 
     public static int selectPositionXY() {
         int position = 0;
-        System.out.println("POSITION");
+        System.out.println("POSITION:");
+        System.out.print("> ");
         position = input.nextInt();
 
-        return validatePosition(position) -1;
+        return validatePosition(position) - 1;
     }
 
 
@@ -59,4 +60,12 @@ public class InputOutput {
         System.out.print("> ");
     }
 
+
+    public static int setCorrectPositionXY() {
+        System.out.println("THIS POSITION IS ALREADY UNCHECKED");
+        int position = 0;
+        position = selectPositionXY();
+        return position;
+    }
 }
+

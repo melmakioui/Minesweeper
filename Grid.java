@@ -31,7 +31,6 @@ public class Grid {
                 cells[i][j] = new Cell();
             }
         }
-
     }
 
 
@@ -104,25 +103,20 @@ public class Grid {
         }
 
 
-        if (cells[x][y].isUncovered()) {
-            System.out.println("THIS POSITION IS ALREADY UNCHECKED");
-            while (cells[x][y].isUncovered()) {
-                x = InputOutput.selectPositionXY();
-                y = InputOutput.selectPositionXY();
-            }
+        while (cells[x][y].isUncovered()) {
+            x = InputOutput.setCorrectPositionXY();
+            y = InputOutput.setCorrectPositionXY();
         }
 
         if (!cells[x][y].isUncovered()) {
-            uncoverBrotherCells(x, y);
+            uncoverCells(x, y);
         }
 
         return false;
     }
 
 
-
-
-    private void uncoverBrotherCells(int x, int y) {
+    private void uncoverCells(int x, int y) {
 
         if (validCoordinates(x, y)) {
             return;
@@ -143,10 +137,10 @@ public class Grid {
         int dy[] = {0, 0, -1, 1, -1, 1, -1, 1};
 
         for (int i = 0; i < 8; i++) {
-            int adjx = x + dx[i];
-            int adjy = y + dy[i];
+            int adjacentX = x + dx[i];
+            int adjacentY = y + dy[i];
 
-            uncoverBrotherCells(adjx, adjy);
+            uncoverCells(adjacentX, adjacentY);
         }
     }
 
