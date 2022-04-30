@@ -9,6 +9,8 @@ public class Grid {
     private final char FLAG = 'F';
     private final char UNCOVERED = ' ';
     private final char BOMB = '*';
+    private final char COVERED = '-';
+
     private final int[] adjacentX = {-1, 1, 0, 0, -1, -1, 1, 1};
     private final int[] adjacentY = {0, 0, -1, 1, -1, 1, -1, 1};
 
@@ -98,7 +100,7 @@ public class Grid {
 
     public boolean checkCoordinates(int x, int y) {
 
-        return (cells[x][y].isUncovered());
+        return (cells[x][y].isUncovered()) || (!cells[x][y].isMarked());
     }
 
 
@@ -131,6 +133,26 @@ public class Grid {
         return (x < 0) || (y < 0) || x >= (cells.length) || y >= (cells[0].length);
     }
 
+
+
+    public void markCell(int x, int y){
+
+        if (!cells[x][y].isUncovered() || (!cells[x][y].isUncovered() && cells[x][y].getMinesAround() != 1)){
+            cells[x][y].markCell(true);
+            cells[x][y].setCellStatus(FLAG);
+        }
+
+    }
+
+    public boolean unmarkCell(int x, int y){
+
+        if (cells[x][y].isMarked()){
+            cells[x][y].markCell(false);
+            cells[x][y].setCellStatus(COVERED);
+        }
+
+        return cells[x][y].isUncovered();
+    }
 
     public void displayBombs() {
 
