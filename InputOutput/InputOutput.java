@@ -13,7 +13,7 @@ public class InputOutput {
     public static int selectOption() {
 
         int option = 0;
-        chooseOptionText();
+        displayOptions();
         option = input.nextInt();
 
         return validateOption(option);
@@ -23,36 +23,35 @@ public class InputOutput {
     private static int validateOption(int option) {
 
         while (option < MIN_OPTION || option > MAX_OPTION) {
-            System.out.println("PLEASE CHOOSE AN OPTION");
+            System.out.println("PLEASE CHOOSE A CORRECT OPTION");
             option = input.nextInt();
         }
-
         return option;
     }
 
 
     public static int selectPositionXY() {
         int position = 0;
-        System.out.println("POSITION:");
+        System.out.println("CELL:");
         System.out.print("> ");
         position = input.nextInt();
 
-        return validatePosition(position) - 1;
+        return validateXYCoordinate(position) - 1;
     }
 
 
-    private static int validatePosition(int position) {
+    private static int validateXYCoordinate(int position) {
 
         while (position < MIN_ROWS_COLUMNS || position > MAX_ROWS_COLUMNS) {
             System.out.println("PLEASE PUT A CORRECT POSITION");
-            position = input.nextInt();
+            position = selectPositionXY();
         }
 
         return position;
     }
 
 
-    private static void chooseOptionText() {
+    private static void displayOptions() {
         System.out.println("CHOOSE AN OPTION" +
                 "\n 1. Uncheck" +
                 "\n 2. Put Flag" +
@@ -61,9 +60,10 @@ public class InputOutput {
     }
 
 
-    public static int setCorrectPositionXY() {
-        System.out.println("THIS POSITION IS ALREADY UNCHECKED");
-        int position = 0;
+    public static int setCorrectCoordinateXY() {
+        System.out.println("THIS POSITION IS ALREADY UNCOVERED" +
+                "\nSELECT A COVERED CELL");
+        int position;
         position = selectPositionXY();
         return position;
     }

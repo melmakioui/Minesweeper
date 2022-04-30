@@ -98,7 +98,7 @@ public class Grid {
 
     public boolean checkCoordinates(int x, int y) {
 
-        return  (cells[x][y].isUncovered());
+        return (cells[x][y].isUncovered());
     }
 
 
@@ -134,6 +134,8 @@ public class Grid {
 
     public void displayBombs() {
 
+        System.out.println();
+        System.out.println("\033[0;31m" + "**YOU LOST**");
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
 

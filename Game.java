@@ -48,9 +48,10 @@ public class Game {
                 if (!grid.checkCoordinates(x, y)) {
                     grid.uncoverCells(x, y);
                     return;
-                } else {
-
                 }
+
+                selectCorrectCoordinates();
+                grid.uncoverCells(x, y);
                 break;
             case 2:
                 //
@@ -62,19 +63,18 @@ public class Game {
     }
 
     private void selectCoordinates() {
-        System.out.println("ROW");
+        System.out.print("ROW ");
         this.x = InputOutput.selectPositionXY();
-        System.out.println("COLUMN");
+        System.out.print("COLUMN ");
         this.y = InputOutput.selectPositionXY();
     }
 
 
     private void selectCorrectCoordinates() {
 
-
-        while (grid.checkCoordinates(x,y)){
-            System.out.println("CELL ALREADY UNCHECKED");
-            selectCoordinates();
+        while (grid.checkCoordinates(x, y)) {
+            x = InputOutput.setCorrectCoordinateXY();
+            y = InputOutput.setCorrectCoordinateXY();
         }
     }
 
