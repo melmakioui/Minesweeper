@@ -1,14 +1,16 @@
 package ProjecteMinesweeper;
 
-import ProjecteMinesweeper.InputOutput.InputOutput;
-
 import java.util.Random;
+
+import ProjecteMinesweeper.InputOutput.InputOutput;
 
 public class Grid {
 
     private final char FLAG = 'F';
     private final char UNCOVERED = ' ';
     private final char BOMB = '*';
+    private final int[] adjacentX = {-1, 1, 0, 0, -1, -1, 1, 1};
+    private final int[] adjacentY = {0, 0, -1, 1, -1, 1, -1, 1};
 
     private Cell cells[][];
     private int mineCounter;
@@ -90,35 +92,19 @@ public class Grid {
 
     private boolean isValidColumn(int x, int y, int row, int col) {
 
-        return (y + col >= 0)
-                && (y + col < cells[x + row].length)
-                && (!(row == 0 && col == 0));
+        return (y + col >= 0) && (y + col < cells[x + row].length) && (!(row == 0 && col == 0));
     }
 
 
     public boolean checkCoordinates(int x, int y) {
 
-        if (cells[x][y].isMine()) {
-            return true;
-        }
-
-
-        while (cells[x][y].isUncovered()) {
-            x = InputOutput.setCorrectPositionXY();
-            y = InputOutput.setCorrectPositionXY();
-        }
-
-        if (!cells[x][y].isUncovered()) {
-            uncoverCells(x, y);
-        }
-
-        return false;
+        return  (cells[x][y].isUncovered());
     }
 
 
-    private void uncoverCells(int x, int y) {
+    public void uncoverCells(int x, int y) {
 
-        if (validCoordinates(x, y)) {
+        if (isValidPosition(x, y)) {
             return;
         }
 
@@ -127,25 +113,21 @@ public class Grid {
         }
 
         cells[x][y].uncoverCell(true);
-        cells[x][y].setCellStatus(UNCOVERED);
 
         if (cells[x][y].getMinesAround() >= 1) {
             return;
         }
 
-        int dx[] = {-1, 1, 0, 0, -1, -1, 1, 1};
-        int dy[] = {0, 0, -1, 1, -1, 1, -1, 1};
-
         for (int i = 0; i < 8; i++) {
-            int adjacentX = x + dx[i];
-            int adjacentY = y + dy[i];
+            int adjX = x + adjacentX[i];
+            int adjY = y + adjacentY[i];
 
-            uncoverCells(adjacentX, adjacentY);
+            uncoverCells(adjX, adjY);
         }
     }
 
 
-    private boolean validCoordinates(int x, int y) {
+    private boolean isValidPosition(int x, int y) {
         return (x < 0) || (y < 0) || x >= (cells.length) || y >= (cells[0].length);
     }
 
@@ -167,16 +149,17 @@ public class Grid {
 
     public void displayGrid() {
 
-        for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[0].length; j++) {
+        for (int row = 0; row < cells.length; row++) {
+            for (int col = 0; col < cells[0].length; col++) {
 
-                if (cells[i][j].isUncovered() && cells[i][j].getMinesAround() >= 1) {
-                    System.out.print("[" + cells[i][j].getMinesAround() + "] ");
+                if (cells[row][col].isUncovered() && cells[row][col].getMinesAround() >= 1) {
+                    System.out.print("[" + cells[row][col].getMinesAround() + "] ");
                     continue;
                 }
 
-                if (cells[i][j].isUncovered()) {
-                    System.out.print("[" + cells[i][j].getCellStatus() + "] ");
+                if (cells[row][col].isUncovered()) {
+                    cells[row][col].setCellStatus(UNCOVERED);
+                    System.out.print("[" + cells[row][col].getCellStatus() + "] ");
                     continue;
                 }
 
@@ -186,11 +169,16 @@ public class Grid {
                     continue;
                 }*/
 
-                System.out.print("[" + cells[i][j].getCellStatus() + "] ");
+                System.out.print("[" + cells[row][col].getCellStatus() + "] ");
             }
             System.out.println();
         }
 
+    }
+
+
+    public boolean cellContainsMine(int x, int y) {
+        return cells[x][y].isMine();
     }
 }
 
