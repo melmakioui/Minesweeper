@@ -53,11 +53,22 @@ public class Game {
                 selectCorrectCoordinates();
                 grid.uncoverCells(x, y);
                 break;
+
             case 2:
-                //
+                selectCoordinates();
+
+                if (grid.checkCoordinates(x,y)){
+                    grid.markCell(x,y);
+                }
+
                 break;
+
             case 3:
-                //
+                selectCoordinates();
+
+                if (grid.unmarkCell(x,y)){
+                    InputOutput.displayCellFlagStatus();
+                }
                 break;
         }
     }
