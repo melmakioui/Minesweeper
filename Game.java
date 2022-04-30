@@ -20,7 +20,6 @@ public class Game {
 
     private void initGame() {
 
-
         do {
             grid.displayGrid();
             option = InputOutput.selectOption();
@@ -50,5 +49,4 @@ public class Game {
                 break;
         }
     }
-
 }

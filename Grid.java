@@ -60,7 +60,6 @@ public class Grid {
             for (int j = 0; j < cells[0].length; j++) {
                 if (hasMinesAround(i, j) && !cells[i][j].isMine()) {
                     cells[i][j].setMinesAround(minesAround);
-                    //cells[i][j].setCellStatus(Character.forDigit(cells[i][j].getMinesAround(),10));
                 }
             }
         }
@@ -125,7 +124,6 @@ public class Grid {
         }
 
 
-
         return false;
 
     }
@@ -138,11 +136,12 @@ public class Grid {
         }
 
         if (cells[x][y].isUncovered()) {
+            System.out.println("IS ALREADY UNCHEKED");
             return;
         }
 
         cells[x][y].uncoverCell(true);
-        cells[x][y].setCellStatus(UNCOVERED);
+
 
         if (cells[x][y].getMinesAround() >= 1) {
             return;
@@ -153,13 +152,12 @@ public class Grid {
         int dy[] = {0, 0, -1, 1, -1, 1, -1, 1};
 
         for (int i = 0; i < 8; i++) {
-            int adjx = x+dx[i];
-            int adjy = y+dy[i];
+            int adjx = x + dx[i];
+            int adjy = y + dy[i];
 
-            uncoverBrotherCells(adjx,adjy);
+            uncoverBrotherCells(adjx, adjy);
         }
     }
-
 
 
     private boolean validCoordinates(int x, int y) {
@@ -182,20 +180,6 @@ public class Grid {
     }
 
 
-    public void displayNumbers() {
-        for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[0].length; j++) {
-
-                if (cells[i][j].isMine()) {
-                    cells[i][j].setCellStatus(BOMB);
-                }
-                System.out.print("[" + cells[i][j].getMinesAround() + "] ");
-            }
-            System.out.println();
-        }
-    }
-
-
     public void displayGrid() {
 
         for (int i = 0; i < cells.length; i++) {
@@ -207,6 +191,7 @@ public class Grid {
                 }
 
                 if (cells[i][j].isUncovered()) {
+                    cells[i][j].setCellStatus(UNCOVERED);
                     System.out.print("[" + cells[i][j].getCellStatus() + "] ");
                     continue;
                 }
@@ -221,8 +206,8 @@ public class Grid {
             }
             System.out.println();
         }
-
     }
+
 }
 
 
