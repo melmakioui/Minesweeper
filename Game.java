@@ -7,7 +7,7 @@ public class Game {
     private int x;
     private int y;
     private boolean lost = false;
-    private int option = 0;
+    private int playerOption = 0;
     private Grid grid;
 
 
@@ -23,8 +23,8 @@ public class Game {
 
         do {
             grid.displayGrid();
-            option = InputOutput.selectOption();
-            selectedOption();
+            playerOption = InputOutput.selectOption();
+            selectedOption(); // --> buscar nombre adecuado
 
         } while (!lost);
 
@@ -32,14 +32,24 @@ public class Game {
 
 
     private void selectedOption() {
-        x = InputOutput.selectPositionXY();
-        y = InputOutput.selectPositionXY();
 
-        switch (option) {
+
+        switch (playerOption) {
             case 1:
-                if (grid.checkCoordinates(x,y)){
+
+                selectCoordinates();
+
+                if (grid.cellContainsMine(x, y)) {
                     lost = true;
                     grid.displayBombs();
+                    return;
+                }
+
+                if (!grid.checkCoordinates(x, y)) {
+                    grid.uncoverCells(x, y);
+                    return;
+                } else {
+
                 }
                 break;
             case 2:
@@ -48,6 +58,23 @@ public class Game {
             case 3:
                 //
                 break;
+        }
+    }
+
+    private void selectCoordinates() {
+        System.out.println("ROW");
+        this.x = InputOutput.selectPositionXY();
+        System.out.println("COLUMN");
+        this.y = InputOutput.selectPositionXY();
+    }
+
+
+    private void selectCorrectCoordinates() {
+
+
+        while (grid.checkCoordinates(x,y)){
+            System.out.println("CELL ALREADY UNCHECKED");
+            selectCoordinates();
         }
     }
 
