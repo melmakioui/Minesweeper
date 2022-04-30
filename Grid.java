@@ -100,7 +100,7 @@ public class Grid {
 
     public boolean checkCoordinates(int x, int y) {
 
-        return (cells[x][y].isUncovered()) || (!cells[x][y].isMarked());
+        return (cells[x][y].isUncovered());
     }
 
 
@@ -134,24 +134,36 @@ public class Grid {
     }
 
 
+    public boolean markCell(int x, int y) {
 
-    public void markCell(int x, int y){
-
-        if (!cells[x][y].isUncovered() || (!cells[x][y].isUncovered() && cells[x][y].getMinesAround() != 1)){
+        if (!cells[x][y].isUncovered() || (!cells[x][y].isUncovered() && cells[x][y].getMinesAround() != 1)) {
             cells[x][y].markCell(true);
-            cells[x][y].setCellStatus(FLAG);
+            return true;
         }
 
+        InputOutput.displayInvalidCellRemove();
+        return false;
     }
 
-    public boolean unmarkCell(int x, int y){
+    public boolean unmarkCell(int x, int y) {
 
-        if (cells[x][y].isMarked()){
+        if (cells[x][y].isMarked()) {
             cells[x][y].markCell(false);
             cells[x][y].setCellStatus(COVERED);
+            return false;
         }
 
-        return cells[x][y].isUncovered();
+        if (!cells[x][y].isMarked() && cells[x][y].isUncovered()) {
+            InputOutput.displayInvalidCellRemove();
+            return true;
+        }
+
+        if (!cells[x][y].isMarked()) {
+            InputOutput.displayInvalidCellFlag();
+            return true;
+        }
+
+        return false;
     }
 
     public void displayBombs() {
@@ -187,11 +199,11 @@ public class Grid {
                     continue;
                 }
 
-/*                if (cells[i][j].isMarked()) {
-                    cells[i][j].setCellStatus(FLAG);
-                    System.out.print("[" + cells[i][j].getCellStatus() + "] ");
+                if (cells[row][col].isMarked()) {
+                    cells[row][col].setCellStatus(FLAG);
+                    System.out.print("[" + cells[row][col].getCellStatus() + "] ");
                     continue;
-                }*/
+                }
 
                 System.out.print("[" + cells[row][col].getCellStatus() + "] ");
             }

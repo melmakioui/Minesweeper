@@ -57,17 +57,16 @@ public class Game {
             case 2:
                 selectCoordinates();
 
-                if (grid.checkCoordinates(x,y)){
-                    grid.markCell(x,y);
+                if (grid.markCell(x,y)){
+                    return;
                 }
-
                 break;
 
             case 3:
                 selectCoordinates();
 
                 if (grid.unmarkCell(x,y)){
-                    InputOutput.displayCellFlagStatus();
+                    return;
                 }
                 break;
         }
