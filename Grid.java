@@ -98,12 +98,6 @@ public class Grid {
     }
 
 
-    public boolean checkCoordinates(int x, int y) {
-
-        return (cells[x][y].isUncovered());
-    }
-
-
     public void uncoverCells(int x, int y) {
 
         if (isValidPosition(x, y)) {
@@ -134,36 +128,30 @@ public class Grid {
     }
 
 
-    public boolean markCell(int x, int y) {
+    public void markCell(int x, int y) {
 
         if (!cells[x][y].isUncovered() || (!cells[x][y].isUncovered() && cells[x][y].getMinesAround() != 1)) {
             cells[x][y].markCell(true);
-            return true;
+            return;
         }
 
         InputOutput.displayInvalidCellRemove();
-        return false;
     }
 
-    public boolean unmarkCell(int x, int y) {
-
-        if (cells[x][y].isMarked()) {
-            cells[x][y].markCell(false);
-            cells[x][y].setCellStatus(COVERED);
-            return false;
-        }
+    public void unmarkCell(int x, int y) {
 
         if (!cells[x][y].isMarked() && cells[x][y].isUncovered()) {
             InputOutput.displayInvalidCellRemove();
-            return true;
+            return;
         }
 
         if (!cells[x][y].isMarked()) {
             InputOutput.displayInvalidCellFlag();
-            return true;
+            return;
         }
 
-        return false;
+        cells[x][y].markCell(false);
+        cells[x][y].setCellStatus(COVERED);
     }
 
     public void displayBombs() {
@@ -215,6 +203,10 @@ public class Grid {
 
     public boolean cellContainsMine(int x, int y) {
         return cells[x][y].isMine();
+    }
+
+    public boolean checkCoordinates(int x, int y) {
+        return (cells[x][y].isUncovered());
     }
 }
 

@@ -35,10 +35,9 @@ public class Game {
 
 
         switch (playerOption) {
-            case 1:
+            case 1 -> {
 
                 selectCoordinates();
-
                 if (grid.cellContainsMine(x, y)) {
                     lost = true;
                     grid.displayBombs();
@@ -49,26 +48,17 @@ public class Game {
                     grid.uncoverCells(x, y);
                     return;
                 }
-
                 selectCorrectCoordinates();
                 grid.uncoverCells(x, y);
-                break;
-
-            case 2:
+            }
+            case 2 -> {
                 selectCoordinates();
-
-                if (grid.markCell(x,y)){
-                    return;
-                }
-                break;
-
-            case 3:
+                grid.markCell(x, y);
+            }
+            case 3 -> {
                 selectCoordinates();
-
-                if (grid.unmarkCell(x,y)){
-                    return;
-                }
-                break;
+                grid.unmarkCell(x, y);
+            }
         }
     }
 
