@@ -11,13 +11,13 @@ public class Grid {
     private final char BOMB = '*';
     private final char COVER = '-';
 
-    private final int[][] adjacentXY = { {-1, 1, 0, 0, -1, -1, 1, 1},
-                                          {0, 0, -1, 1, -1, 1, -1, 1}
-                                        };
+    private final int[][] adjacentXY = {{-1, 1, 0, 0, -1, -1, 1, 1},
+            {0, 0, -1, 1, -1, 1, -1, 1}
+    };
     private int flagCounter = 10;
     private Cell cells[][];
     private int mineCounter;
-    private int savedCells;
+    private int savedCellsCounter;
     private int uncoveredCells;
 
 
@@ -49,7 +49,7 @@ public class Grid {
         int x;
         int y;
 
-        while (counter != cells.length + 1) {
+        while (counter != 11) {
             x = randomMines.nextInt(cells[0].length - 1);
             y = randomMines.nextInt(cells.length - 1);
 
@@ -109,7 +109,6 @@ public class Grid {
         }
 
         if (cells[x][y].isUncovered()) {
-            uncoveredCells++;
             return;
         }
 
@@ -134,13 +133,13 @@ public class Grid {
 
 
     public void markCell(int x, int y) {
-
+            //no sense
         if (!cells[x][y].isUncovered() || (!cells[x][y].isUncovered() && cells[x][y].getMinesAround() != 1)) {
             cells[x][y].markCell(true);
             flagCounter--;
 
             if (cells[x][y].isMine()) {
-                savedCells++;
+                savedCellsCounter++;
             }
 
             return;
@@ -161,6 +160,10 @@ public class Grid {
             return;
         }
 
+        if (cells[x][y].isMine()) {
+            savedCellsCounter--;
+        }
+
         cells[x][y].markCell(false);
         cells[x][y].setCellStatus(COVER);
         flagCounter++;
@@ -169,14 +172,14 @@ public class Grid {
     public void displayBombs() {
 
         System.out.println();
-        System.out.println("\033[0;31m" + "**YOU LOST**");
+        System.out.println("**YOU LOST**");
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
 
                 if (cells[i][j].isMine()) {
                     cells[i][j].setCellStatus(BOMB);
                 }
-                System.out.print("\033[0;31m" + "[" + cells[i][j].getCellStatus() + "] ");
+                System.out.print("[" + cells[i][j].getCellStatus() + "] ");
             }
             System.out.println();
         }
@@ -187,6 +190,7 @@ public class Grid {
 
         for (int row = 0; row < cells.length; row++) {
             for (int col = 0; col < cells[0].length; col++) {
+
 
                 if (cells[row][col].isUncovered() && cells[row][col].getMinesAround() >= 1) {
                     System.out.print("[" + cells[row][col].getMinesAround() + "] ");
@@ -206,6 +210,7 @@ public class Grid {
                 }
 
                 System.out.print("[" + cells[row][col].getCellStatus() + "] ");
+
             }
             System.out.println();
         }
@@ -225,13 +230,25 @@ public class Grid {
         return flagCounter;
     }
 
-    public int getSavedCells() {
-        return savedCells;
+    public int getSavedCellsCounter() {
+        return savedCellsCounter;
     }
 
     public int getUncoveredCells() {
+
+        uncoveredCells = 0;
+
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[0].length; j++) {
+                if (cells[i][j].isUncovered()) {
+                    uncoveredCells++;
+                }
+            }
+        }
         return uncoveredCells;
     }
+
+
 }
 
 

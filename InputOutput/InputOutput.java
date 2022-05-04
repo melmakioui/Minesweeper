@@ -1,5 +1,7 @@
 package ProjecteMinesweeper.InputOutput;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.Scanner;
 
 public class InputOutput {
@@ -72,8 +74,11 @@ public class InputOutput {
         System.out.println("¡THIS CELL ISN'T MARKED!");
     }
 
+    public static String A = "a";
+
     public static void displayInvalidCellRemove() {
         System.out.println("THIS CELL IS ALREADY UNCOVERED, YOU CANNOT PUT/REMOVE A FLAG IN AN UNCOVERED CELL");
+        System.out.println(A);
     }
 
     public static void displayWinner(){

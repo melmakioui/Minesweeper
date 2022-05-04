@@ -33,15 +33,13 @@ public class Game {
                 grid.displayGrid();
                 break;
             }
-
-
         } while (!lost);
 
     }
 
 
     public boolean isWinner(){
-        return (grid.getSavedCells() == 10 || grid.getUncoveredCells() == EMPTY_CELLS) && grid.getFlagCounter() < 0;
+        return (grid.getSavedCellsCounter() == 10 && grid.getFlagCounter() >= 0) || grid.getUncoveredCells() == EMPTY_CELLS;
     }
 
 
