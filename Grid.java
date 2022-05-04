@@ -9,13 +9,16 @@ public class Grid {
     private final char FLAG = 'F';
     private final char UNCOVERED = ' ';
     private final char BOMB = '*';
-    private final char COVERED = '-';
+    private final char COVER = '-';
 
-    private final int[] adjacentX = {-1, 1, 0, 0, -1, -1, 1, 1};
-    private final int[] adjacentY = {0, 0, -1, 1, -1, 1, -1, 1};
-
+    private final int[][] adjacentXY = { {-1, 1, 0, 0, -1, -1, 1, 1},
+                                          {0, 0, -1, 1, -1, 1, -1, 1}
+                                        };
+    private int flagCounter = 10;
     private Cell cells[][];
     private int mineCounter;
+    private int savedCells;
+    private int uncoveredCells;
 
 
     public Grid() {
@@ -33,6 +36,7 @@ public class Grid {
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
                 cells[i][j] = new Cell();
+                cells[i][j].setCellStatus(COVER);
             }
         }
     }
@@ -74,7 +78,7 @@ public class Grid {
         for (int row = -1; row <= 1; row++) {
             if (isValidRow(x, row)) {
                 for (int col = -1; col <= 1; col++) {
-                    if (isValidColumn(x, y, row, col)) {
+                    if (isValidColumn(x, y, row, col) && (!(row == 0 && col == 0))) {
                         if (cells[x + row][y + col].isMine()) {
                             mineCounter++;
                         }
@@ -94,7 +98,7 @@ public class Grid {
 
     private boolean isValidColumn(int x, int y, int row, int col) {
 
-        return (y + col >= 0) && (y + col < cells[x + row].length) && (!(row == 0 && col == 0));
+        return (y + col >= 0) && (y + col < cells[x + row].length);
     }
 
 
@@ -105,6 +109,7 @@ public class Grid {
         }
 
         if (cells[x][y].isUncovered()) {
+            uncoveredCells++;
             return;
         }
 
@@ -115,8 +120,8 @@ public class Grid {
         }
 
         for (int i = 0; i < 8; i++) {
-            int adjX = x + adjacentX[i];
-            int adjY = y + adjacentY[i];
+            int adjX = x + adjacentXY[0][i];
+            int adjY = y + adjacentXY[1][i];
 
             uncoverCells(adjX, adjY);
         }
@@ -132,6 +137,12 @@ public class Grid {
 
         if (!cells[x][y].isUncovered() || (!cells[x][y].isUncovered() && cells[x][y].getMinesAround() != 1)) {
             cells[x][y].markCell(true);
+            flagCounter--;
+
+            if (cells[x][y].isMine()) {
+                savedCells++;
+            }
+
             return;
         }
 
@@ -151,7 +162,8 @@ public class Grid {
         }
 
         cells[x][y].markCell(false);
-        cells[x][y].setCellStatus(COVERED);
+        cells[x][y].setCellStatus(COVER);
+        flagCounter++;
     }
 
     public void displayBombs() {
@@ -201,12 +213,24 @@ public class Grid {
     }
 
 
-    public boolean cellContainsMine(int x, int y) {
+    public boolean containsMine(int x, int y) {
         return cells[x][y].isMine();
     }
 
     public boolean checkCoordinates(int x, int y) {
         return (cells[x][y].isUncovered());
+    }
+
+    public int getFlagCounter() {
+        return flagCounter;
+    }
+
+    public int getSavedCells() {
+        return savedCells;
+    }
+
+    public int getUncoveredCells() {
+        return uncoveredCells;
     }
 }
 
