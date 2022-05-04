@@ -4,6 +4,7 @@ import ProjecteMinesweeper.InputOutput.InputOutput;
 
 public class Game {
 
+    private final int EMPTY_CELLS = 90;
     private int x;
     private int y;
     private boolean lost = false;
@@ -22,23 +23,36 @@ public class Game {
 
 
         do {
+            System.out.println( "FLAGS: " + grid.getFlagCounter());
             grid.displayGrid();
             playerOption = InputOutput.selectOption();
-            selectedOption(); // --> buscar nombre adecuado
+            selectedOption();
+
+            if (isWinner()){
+                InputOutput.displayWinner();
+                grid.displayGrid();
+                break;
+            }
+
 
         } while (!lost);
 
     }
 
 
-    private void selectedOption() {
+    public boolean isWinner(){
+        return (grid.getSavedCells() == 10 || grid.getUncoveredCells() == EMPTY_CELLS) && grid.getFlagCounter() < 0;
+    }
 
+
+
+    private void selectedOption() {
 
         switch (playerOption) {
             case 1 -> {
 
                 selectCoordinates();
-                if (grid.cellContainsMine(x, y)) {
+                if (grid.containsMine(x, y)) {
                     lost = true;
                     grid.displayBombs();
                     return;
@@ -62,16 +76,16 @@ public class Game {
         }
     }
 
+
     private void selectCoordinates() {
-        System.out.print("ROW ");
+        System.out.print("X COORDINATE (ROW)");
         this.x = InputOutput.selectPositionXY();
-        System.out.print("COLUMN ");
+        System.out.print("Y COORDINATE (COLUMN)");
         this.y = InputOutput.selectPositionXY();
     }
 
 
     private void selectCorrectCoordinates() {
-
         while (grid.checkCoordinates(x, y)) {
             x = InputOutput.setCorrectCoordinateXY();
             y = InputOutput.setCorrectCoordinateXY();
