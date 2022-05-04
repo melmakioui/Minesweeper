@@ -1,7 +1,5 @@
 package ProjecteMinesweeper.InputOutput;
 
-import org.w3c.dom.ls.LSOutput;
-
 import java.util.Scanner;
 
 public class InputOutput {
@@ -14,42 +12,58 @@ public class InputOutput {
 
     public static int selectOption() {
 
-        int option = 0;
+        int option;
         displayOptions();
         option = input.nextInt();
 
-        return validateOption(option);
-    }
-
-
-    private static int validateOption(int option) {
-
         while (option < MIN_OPTION || option > MAX_OPTION) {
-            System.out.println("PLEASE CHOOSE A CORRECT OPTION");
+            System.out.println("*¡¡¡PLEASE CHOOSE A CORRECT OPTION!!!*");
+            System.out.print("> ");
             option = input.nextInt();
         }
+
         return option;
     }
 
 
     public static int selectPositionXY() {
-        int position = 0;
-        System.out.println("CELL:");
+        int position;
+        System.out.println("COORDINATE:");
         System.out.print("> ");
         position = input.nextInt();
 
-        return validateXYCoordinate(position) - 1;
+        while (position < MIN_ROWS_COLUMNS || position > MAX_ROWS_COLUMNS) {
+            System.out.println("¡¡PLEASE PUT A CORRECT POSITION!!");
+            System.out.print("> ");
+            position = input.nextInt();
+        }
+
+        return position - 1;
     }
 
 
-    private static int validateXYCoordinate(int position) {
+    public static void displayAlreadyUncoveredCoordinate() {
+        System.out.println("¡¡¡¡THIS POSITION IS ALREADY UNCOVERED!!!!" +
+                "\n**SELECT A CORRECT CELL**");
 
-        while (position < MIN_ROWS_COLUMNS || position > MAX_ROWS_COLUMNS) {
-            System.out.println("PLEASE PUT A CORRECT POSITION");
-            position = selectPositionXY();
-        }
+    }
 
-        return position;
+    public static void displayInvalidCellFlag() {
+        System.out.println();
+        System.out.println("*¡¡¡¡THIS CELL ISN'T MARKED!!!!*");
+        System.out.println();
+    }
+
+
+    public static void displayInvalidCellToMark() {
+        System.out.println();
+        System.out.println("¡¡¡THIS CELL IS ALREADY UNCOVERED, " +
+                "\n¡¡*YOU CANNOT PUT/REMOVE A FLAG IN AN UNCOVERED CELL*!!");
+        System.out.println();
+    }
+
+    public static void displayWinner() {
+        System.out.println("\033[0;32m" + "**YOU WIN**");
     }
 
 
@@ -61,29 +75,6 @@ public class InputOutput {
         System.out.print("> ");
     }
 
-
-    public static int setCorrectCoordinateXY() {
-        System.out.println("THIS POSITION IS ALREADY UNCOVERED" +
-                "\nSELECT A COVERED CELL");
-        int position;
-        position = selectPositionXY();
-        return position;
-    }
-
-    public static void displayInvalidCellFlag() {
-        System.out.println("¡THIS CELL ISN'T MARKED!");
-    }
-
-    public static String A = "a";
-
-    public static void displayInvalidCellRemove() {
-        System.out.println("THIS CELL IS ALREADY UNCOVERED, YOU CANNOT PUT/REMOVE A FLAG IN AN UNCOVERED CELL");
-        System.out.println(A);
-    }
-
-    public static void displayWinner(){
-        System.out.println("\033[0;32m" + "**YOU WIN**");
-    }
 
 }
 
