@@ -14,7 +14,7 @@ public class Game {
 
     public Game() {
         this.grid = new Grid();
-
+        grid.displayBombs();
         initGame();
     }
 
@@ -23,71 +23,100 @@ public class Game {
 
 
         do {
-            System.out.println( "FLAGS: " + grid.getFlagCounter());
+            System.out.println(grid.getSavedCellsCounter());
+            System.out.println(grid.getUncoveredCells());
+            System.out.println("FLAGS: " + grid.getFlagCounter());
             grid.displayGrid();
             playerOption = InputOutput.selectOption();
-            selectedOption();
+            choosedOption();
 
-            if (isWinner()){
-                InputOutput.displayWinner();
-                grid.displayGrid();
-                break;
-            }
-        } while (!lost);
+        } while (!isLoss() && !isWinner());
 
     }
 
 
-    public boolean isWinner(){
-        return (grid.getSavedCellsCounter() == 10 && grid.getFlagCounter() >= 0) || grid.getUncoveredCells() == EMPTY_CELLS;
-    }
+    private void choosedOption() {
 
-
-
-    private void selectedOption() {
+        selectCoordinates();
 
         switch (playerOption) {
-            case 1 -> {
-
-                selectCoordinates();
-                if (grid.containsMine(x, y)) {
-                    lost = true;
-                    grid.displayBombs();
-                    return;
-                }
-
-                if (!grid.checkCoordinates(x, y)) {
-                    grid.uncoverCells(x, y);
-                    return;
-                }
-                selectCorrectCoordinates();
-                grid.uncoverCells(x, y);
-            }
-            case 2 -> {
-                selectCoordinates();
-                grid.markCell(x, y);
-            }
-            case 3 -> {
-                selectCoordinates();
-                grid.unmarkCell(x, y);
-            }
+            case 1 -> verifyUncoverCoordinates();
+            case 2 -> verifyMarkCellCoordinates();
+            case 3 -> verifyUnmarkCellCoordinates();
         }
+    }
+
+
+    private void verifyUncoverCoordinates() {
+        while (grid.isCellUncovered(x, y)) {
+            InputOutput.displayAlreadyUncoveredCoordinate();
+            selectCoordinates();
+        }
+        grid.uncoverCells(x, y);
+    }
+
+
+    private void verifyMarkCellCoordinates() {
+        if (grid.isCellMarked(x, y)) {
+            InputOutput.displayInvalidCellToMark();
+            return;
+        }
+
+        if (grid.isCellUncovered(x, y)) {
+            InputOutput.displayInvalidCellToMark();
+            return;
+        }
+
+        grid.markCell(x, y);
+    }
+
+
+    private void verifyUnmarkCellCoordinates() {
+        if (grid.isCellUncovered(x, y) && !grid.isCellMarked(x, y)) {
+            InputOutput.displayInvalidCellToMark();
+            return;
+        }
+
+        if (!grid.isCellMarked(x, y)) {
+            InputOutput.displayInvalidCellFlag();
+            return;
+        }
+
+        grid.unmarkCell(x, y);
+    }
+
+
+    private boolean isWinner() {
+        if ((grid.getSavedCellsCounter() == 10 && grid.getFlagCounter() >= 0)
+                || grid.getUncoveredCells() == EMPTY_CELLS) {
+            InputOutput.displayWinner();
+            grid.displayGrid();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isLoss() {
+
+        //Problem right here
+        if (playerOption == 2) {
+            return false;
+        }
+
+        if (grid.isCellContainsMine(x, y)) {
+            grid.displayBombs();
+            return true;
+        }
+        return false;
     }
 
 
     private void selectCoordinates() {
         System.out.print("X COORDINATE (ROW)");
-        this.x = InputOutput.selectPositionXY();
+        x = InputOutput.selectPositionXY();
         System.out.print("Y COORDINATE (COLUMN)");
-        this.y = InputOutput.selectPositionXY();
+        y = InputOutput.selectPositionXY();
     }
 
-
-    private void selectCorrectCoordinates() {
-        while (grid.checkCoordinates(x, y)) {
-            x = InputOutput.setCorrectCoordinateXY();
-            y = InputOutput.setCorrectCoordinateXY();
-        }
-    }
 
 }
