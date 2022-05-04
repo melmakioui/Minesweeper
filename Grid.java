@@ -79,13 +79,14 @@ public class Grid {
             return;
         }
 
+        int mineCounter = 1;
 
         for (int row = -1; row <= 1; row++) {
             if (isValidRow(x, row)) {
                 for (int col = -1; col <= 1; col++) {
                     if (isValidColumn(x, y, row, col) && (!(row == 0 && col == 0))) {
                         if (cells[x + row][y + col].isMine()) {
-                            cells[x][y].setMinesAround(1);
+                            cells[x][y].setMinesAround(mineCounter++);
                         }
                     }
                 }

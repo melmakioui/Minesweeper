@@ -14,7 +14,7 @@ public class Game {
 
     public Game() {
         this.grid = new Grid();
-        grid.displayBombs();
+
         initGame();
     }
 
@@ -23,8 +23,6 @@ public class Game {
 
 
         do {
-            System.out.println(grid.getSavedCellsCounter());
-            System.out.println(grid.getUncoveredCells());
             System.out.println("FLAGS: " + grid.getFlagCounter());
             grid.displayGrid();
             playerOption = InputOutput.selectOption();
