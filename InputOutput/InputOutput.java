@@ -68,12 +68,16 @@ public class InputOutput {
         return position;
     }
 
-    public static void displayInvalidCellFlag(){
+    public static void displayInvalidCellFlag() {
         System.out.println("¡THIS CELL ISN'T MARKED!");
     }
 
-    public static void displayInvalidCellRemove(){
+    public static void displayInvalidCellRemove() {
         System.out.println("THIS CELL IS ALREADY UNCOVERED, YOU CANNOT PUT/REMOVE A FLAG IN AN UNCOVERED CELL");
+    }
+
+    public static void displayWinner(){
+        System.out.println("\033[0;32m" + "**YOU WIN**");
     }
 
 }

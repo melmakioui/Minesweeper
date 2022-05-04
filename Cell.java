@@ -3,7 +3,7 @@ package ProjecteMinesweeper;
 
 public class Cell {
 
-    private char status = '-';
+    private char status;
     private boolean uncovered;
     private boolean marked; //"flag"
     private boolean mine;
