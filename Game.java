@@ -46,7 +46,7 @@ public class Game {
 
 
     private void verifyUncoverCoordinates() {
-        while (grid.isCellUncovered(x, y)) {
+        while (grid.isCellCoordinatesUncovered(x, y)) {
             InputOutput.displayAlreadyUncoveredCoordinate();
             selectCoordinates();
         }
@@ -55,12 +55,12 @@ public class Game {
 
 
     private void verifyMarkCellCoordinates() {
-        if (grid.isCellMarked(x, y)) {
+        if (grid.isCellCoordinatesMarked(x, y)) {
             InputOutput.displayInvalidCellToMark();
             return;
         }
 
-        if (grid.isCellUncovered(x, y)) {
+        if (grid.isCellCoordinatesUncovered(x, y)) {
             InputOutput.displayInvalidCellToMark();
             return;
         }
@@ -70,12 +70,12 @@ public class Game {
 
 
     private void verifyUnmarkCellCoordinates() {
-        if (grid.isCellUncovered(x, y) && !grid.isCellMarked(x, y)) {
+        if (grid.isCellCoordinatesUncovered(x, y) && !grid.isCellCoordinatesMarked(x, y)) {
             InputOutput.displayInvalidCellToMark();
             return;
         }
 
-        if (!grid.isCellMarked(x, y)) {
+        if (!grid.isCellCoordinatesMarked(x, y)) {
             InputOutput.displayInvalidCellFlag();
             return;
         }
@@ -101,7 +101,7 @@ public class Game {
             return false;
         }
 
-        if (grid.isCellContainsMine(x, y)) {
+        if (grid.isCellCoordinatesContainsMine(x, y)) {
             grid.displayBombs();
             return true;
         }

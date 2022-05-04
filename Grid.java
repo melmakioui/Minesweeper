@@ -2,8 +2,6 @@ package ProjecteMinesweeper;
 
 import java.util.Random;
 
-import ProjecteMinesweeper.InputOutput.InputOutput;
-
 public class Grid {
 
     private final char FLAG = 'F';
@@ -139,7 +137,7 @@ public class Grid {
 
     public boolean markCell(int x, int y) {
 
-        if (isCellContainsMine(x, y)) {
+        if (isCellCoordinatesContainsMine(x, y)) {
             savedCellsCounter++;
         }
 
@@ -155,7 +153,7 @@ public class Grid {
 
     public void unmarkCell(int x, int y) {
 
-        if (isCellContainsMine(x, y)) {
+        if (isCellCoordinatesContainsMine(x, y)) {
             savedCellsCounter--;
         }
 
@@ -213,15 +211,15 @@ public class Grid {
     }
 
 
-    public boolean isCellContainsMine(int x, int y) {
+    public boolean isCellCoordinatesContainsMine(int x, int y) {
         return cells[x][y].isMine();
     }
 
-    public boolean isCellUncovered(int x, int y) {
+    public boolean isCellCoordinatesUncovered(int x, int y) {
         return cells[x][y].isUncovered();
     }
 
-    public boolean isCellMarked(int x, int y) {
+    public boolean isCellCoordinatesMarked(int x, int y) {
         return cells[x][y].isMarked();
     }
 
