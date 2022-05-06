@@ -4,16 +4,21 @@ import ProjecteMinesweeper.InputOutput.InputOutput;
 
 public class Game {
 
-    private final int EMPTY_CELLS = 90;
+    private int EMPTY_CELLS;
     private int x;
     private int y;
     private boolean lost = false;
     private int playerOption = 0;
     private Grid grid;
 
+    private int level;
+    private int mines;
+
 
     public Game() {
-        this.grid = new Grid();
+        level = InputOutput.selectLevel();
+        mines = InputOutput.generateNumMines(level);
+        this.grid = new Grid(level, mines);
 
         initGame();
     }
@@ -21,9 +26,8 @@ public class Game {
 
     private void initGame() {
 
-
         do {
-            System.out.println("FLAGS: " + grid.getFlagCounter());
+            //System.out.println("FLAGS: " + grid.getFlagCounter());
             grid.displayGrid();
             playerOption = InputOutput.selectOption();
             choosedOption();
@@ -38,14 +42,14 @@ public class Game {
         selectCoordinates();
 
         switch (playerOption) {
-            case 1 -> verifyUncoverCoordinates();
-            case 2 -> verifyMarkCellCoordinates();
-            case 3 -> verifyUnmarkCellCoordinates();
+            case 1 -> verifyUncoverCoordinate();
+            case 2 -> verifyMarkCellCoordinate();
+            case 3 -> verifyUnmarkCellCoordinate();
         }
     }
 
 
-    private void verifyUncoverCoordinates() {
+    private void verifyUncoverCoordinate() {
         while (grid.isCellCoordinatesUncovered(x, y)) {
             InputOutput.displayAlreadyUncoveredCoordinate();
             selectCoordinates();
@@ -54,7 +58,7 @@ public class Game {
     }
 
 
-    private void verifyMarkCellCoordinates() {
+    private void verifyMarkCellCoordinate() {
         if (grid.isCellCoordinatesMarked(x, y)) {
             InputOutput.displayInvalidCellToMark();
             return;
@@ -69,7 +73,7 @@ public class Game {
     }
 
 
-    private void verifyUnmarkCellCoordinates() {
+    private void verifyUnmarkCellCoordinate() {
         if (grid.isCellCoordinatesUncovered(x, y) && !grid.isCellCoordinatesMarked(x, y)) {
             InputOutput.displayInvalidCellToMark();
             return;
@@ -94,9 +98,10 @@ public class Game {
         return false;
     }
 
+
     private boolean isLoss() {
 
-        //Problem right here
+        //Constant
         if (playerOption == 2) {
             return false;
         }
