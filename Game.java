@@ -4,21 +4,21 @@ import ProjecteMinesweeper.InputOutput.InputOutput;
 
 public class Game {
 
-    private int EMPTY_CELLS;
+    private final int EMPTY_CELLS;
+    private final int CELLS;
+    private final int MINES;
+
     private int x;
     private int y;
-    private boolean lost = false;
     private int playerOption = 0;
-    private Grid grid;
-
-    private int level;
-    private int mines;
+    private final Grid grid;
 
 
     public Game() {
-        level = InputOutput.selectLevel();
-        mines = InputOutput.generateNumMines(level);
-        this.grid = new Grid(level, mines);
+        this.CELLS = InputOutput.selectLevel();
+        this.MINES = InputOutput.generateNumMines(CELLS);
+        this.EMPTY_CELLS = ((CELLS * CELLS) - MINES);
+        this.grid = new Grid(CELLS, MINES);
 
         initGame();
     }
@@ -27,70 +27,35 @@ public class Game {
     private void initGame() {
 
         do {
-            //System.out.println("FLAGS: " + grid.getFlagCounter());
             grid.displayGrid();
             playerOption = InputOutput.selectOption();
-            choosedOption();
+
+            switch (playerOption) {
+                case 1 -> isValidToShow();
+                case 2 -> {
+                    selectCoordinates();
+                    grid.toggleFlag(x, y);
+                }
+            }
 
         } while (!isLoss() && !isWinner());
 
     }
 
 
-    private void choosedOption() {
-
+    private void isValidToShow() {
         selectCoordinates();
 
-        switch (playerOption) {
-            case 1 -> verifyUncoverCoordinate();
-            case 2 -> verifyMarkCellCoordinate();
-            case 3 -> verifyUnmarkCellCoordinate();
-        }
-    }
-
-
-    private void verifyUncoverCoordinate() {
-        while (grid.isCellCoordinatesUncovered(x, y)) {
-            InputOutput.displayAlreadyUncoveredCoordinate();
+        while (grid.isCellShowed(x, y)) {
+            InputOutput.displayAlreadyShowedCell();
             selectCoordinates();
         }
-        grid.uncoverCells(x, y);
-    }
-
-
-    private void verifyMarkCellCoordinate() {
-        if (grid.isCellCoordinatesMarked(x, y)) {
-            InputOutput.displayInvalidCellToMark();
-            return;
-        }
-
-        if (grid.isCellCoordinatesUncovered(x, y)) {
-            InputOutput.displayInvalidCellToMark();
-            return;
-        }
-
-        grid.markCell(x, y);
-    }
-
-
-    private void verifyUnmarkCellCoordinate() {
-        if (grid.isCellCoordinatesUncovered(x, y) && !grid.isCellCoordinatesMarked(x, y)) {
-            InputOutput.displayInvalidCellToMark();
-            return;
-        }
-
-        if (!grid.isCellCoordinatesMarked(x, y)) {
-            InputOutput.displayInvalidCellFlag();
-            return;
-        }
-
-        grid.unmarkCell(x, y);
+        grid.showCell(x, y);
     }
 
 
     private boolean isWinner() {
-        if ((grid.getSavedCellsCounter() == 10 && grid.getFlagCounter() >= 0)
-                || grid.getUncoveredCells() == EMPTY_CELLS) {
+        if (grid.getShowedCells() == EMPTY_CELLS) {
             InputOutput.displayWinner();
             grid.displayGrid();
             return true;
@@ -101,12 +66,8 @@ public class Game {
 
     private boolean isLoss() {
 
-        //Constant
-        if (playerOption == 2) {
-            return false;
-        }
-
-        if (grid.isCellCoordinatesContainsMine(x, y)) {
+        //Constant -> 2
+        if (grid.isCellContainsMine(x, y) && playerOption != 2) {
             grid.displayBombs();
             return true;
         }
@@ -115,11 +76,10 @@ public class Game {
 
 
     private void selectCoordinates() {
-        System.out.print("X COORDINATE (ROW)");
+        System.out.println("SELECT ROW:");
         x = InputOutput.selectPositionXY();
-        System.out.print("Y COORDINATE (COLUMN)");
+        System.out.println("SELECT COLUMN:");
         y = InputOutput.selectPositionXY();
     }
-
 
 }
