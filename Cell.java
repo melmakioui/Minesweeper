@@ -1,50 +1,59 @@
 package ProjecteMinesweeper;
 
 
+import ProjecteMinesweeper.InputOutput.InputOutput;
+
 public class Cell {
 
     private final char FLAG = 'F';
-    private final char UNCOVERED = ' ';
-    private final char BOMB = '*';
-    private final char COVER = '-';
+    private final char SHOW = ' ';
+    private final char BOMB = 'X';
+    private final char HIDE = '-';
 
-    private char status;  // error de plantetjament
+    private char cell;
     private boolean hided;
-    private boolean flag; //"flag"
+    private boolean flag;
     private boolean mine;
     private int minesAround;
 
 
-    public Cell(){
+    public Cell() {
         this.hided = false;
         this.flag = false;
         this.mine = false;
         this.minesAround = 0;
-
     }
 
-    public boolean toggleFlag(){
+    public boolean show() {
 
         if (hided)
-            return false;
+            return true;
 
-        flag = !flag;
-
-        return true;
-    }
-
-    public boolean show(){
-        if ( mine ) {
-            // tot el tractament de perdre partida
-        }
-
-        hided = false;
-
-        if ( flag )
+        if (flag && !mine)
             flag = false;
 
-        return true;
+        hided = true;
+        expose();
 
+        if (minesAround >= 1)
+            return true;
+
+        return false;
+    }
+
+
+    public void toggleFlag() {
+
+        if (hided){
+            InputOutput.displayAlreadyShowedCell();
+            return;
+        }
+
+        flag = !flag;
+        flag();
+
+        if (!flag)
+            hide();
     }
 
     //Getters - Setters
@@ -52,66 +61,43 @@ public class Cell {
         return hided;
     }
 
-    public void uncoverCell() {
-        this.status = UNCOVERED;
-        this.hided = true;
-    }
-
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void markCell() {
-
-        if (isMine()) {
-            //savedCellsCounter++;
-            //incrementSavedCellsCounter
-        }
-
-        if (!isHided()) {
-            flag = true;
-            //decrementflagCounter--;
-        }
-        this.status = FLAG;
-        this.flag = true;
-    }
-
-    public void unmarkCell(){
-        this.status = COVER;
-        this.flag = false;
-    }
-
     public boolean isMine() {
         return mine;
     }
 
-    public void putMine() {
-        this.mine = true;
+    public void toggleMine() {
+        this.mine = !mine;
     }
 
-    public void removeMine(){
-        this.mine = false;
+    public void incrementCell() {
+        this.minesAround++;
     }
 
     public int getMinesAround() {
         return minesAround;
     }
 
-    public void incrementCell() {
-        this.minesAround ++;
+    public void hide() {
+        this.cell = HIDE;
     }
 
-    public char getCellStatus() {
-        return status;
+    public void bomb() {
+        this.cell = BOMB;
     }
 
-    public void setCellStatus(char status) {
-        this.status = status;
+    public void expose() {
+        this.cell = SHOW;
     }
 
-    public void hide(){
-        this.status = COVER;
+    public void flag() {
+        this.cell = FLAG;
     }
 
+    public char getCell() {
+        return cell;
+    }
 
+    public void putMinesAround() {
+        this.cell = Character.forDigit(minesAround, 10);
+    }
 }
