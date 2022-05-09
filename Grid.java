@@ -106,6 +106,22 @@ public class Grid {
     }
 
 
+    public void displayGrid() {
+
+        System.out.println();
+        for (int row = 0; row < cells.length; row++) {
+            for (int col = 0; col < cells[0].length; col++) {
+
+                if (cells[row][col].isHided() && cells[row][col].getMinesAround() >= 1)
+                    cells[row][col].putMinesAround();
+
+                System.out.print("[" + cells[row][col].getCell() + "] ");
+
+            }
+            System.out.println();
+        }
+    }
+
     public void displayBombs() {
 
         System.out.println();
@@ -124,26 +140,7 @@ public class Grid {
     }
 
 
-
-    public void displayGrid() {
-
-
-        for (int row = 0; row < cells.length; row++) {
-            for (int col = 0; col < cells[0].length; col++) {
-
-                if (cells[row][col].isHided() && cells[row][col].getMinesAround() >= 1)
-                    cells[row][col].putMinesAround();
-
-                System.out.print("[" + cells[row][col].getCell() + "] ");
-
-            }
-            System.out.println();
-
-        }
-    }
-
-    //Method fowarding
-    public boolean isCellContainsMine(int x, int y) {
+    public boolean isCellMine(int x, int y) {
         return cells[x][y].isMine();
     }
 
@@ -151,9 +148,10 @@ public class Grid {
         return cells[x][y].isHided();
     }
 
+    public boolean isCellFlag(int x, int y) {
+        return cells[x][y].isFlag();
+    }
 
-
-    //Getters Setters
     public int getShowedCells() {
 
         showedCells = 0;

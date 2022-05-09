@@ -38,9 +38,6 @@ public class InputOutput {
         return EASY;
     }
 
-    ;
-
-
     public static int generateNumMines(int level) {
 
         return switch (level) {
@@ -83,13 +80,13 @@ public class InputOutput {
 
 
     public static void displayAlreadyShowedCell() {
-        System.out.println("¡¡¡¡THIS POSITION IS ALREADY SHOWED!!!!");
+        System.out.println("¡¡¡¡THIS CELL IS ALREADY SHOWED!!!!");
 
     }
 
+    public static void displayCellHasFlag() {
+        System.out.println("¡¡¡¡THIS CELL HAS A FLAG, REMOVE FLAG !!!!");
 
-    public static void displayWinner() {
-        System.out.println("\033[0;32m" + "**YOU WIN**");
     }
 
 

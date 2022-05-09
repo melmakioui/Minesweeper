@@ -7,6 +7,8 @@ public class Game {
     private final int EMPTY_CELLS;
     private final int CELLS;
     private final int MINES;
+    private final int SHOW_CELL_OPTION = 1;
+    private final int FLAG_CELL_OPTION = 2;
 
     private int x;
     private int y;
@@ -31,24 +33,29 @@ public class Game {
             playerOption = InputOutput.selectOption();
 
             switch (playerOption) {
-                case 1 -> isValidToShow();
-                case 2 -> {
+                case SHOW_CELL_OPTION -> validateCoordinates();
+                case FLAG_CELL_OPTION -> {
                     selectCoordinates();
                     grid.toggleFlag(x, y);
                 }
             }
 
-        } while (!isLoss() && !isWinner());
+        } while (!isWinner());
 
     }
 
 
-    private void isValidToShow() {
+    private void validateCoordinates() {
+
         selectCoordinates();
 
-        while (grid.isCellShowed(x, y)) {
+        if (grid.isCellFlag(x,y)){
+            InputOutput.displayCellHasFlag();
+            return;
+        }
+        if (grid.isCellShowed(x, y)) {
             InputOutput.displayAlreadyShowedCell();
-            selectCoordinates();
+            return;
         }
         grid.showCell(x, y);
     }
@@ -56,21 +63,16 @@ public class Game {
 
     private boolean isWinner() {
         if (grid.getShowedCells() == EMPTY_CELLS) {
-            InputOutput.displayWinner();
+            System.out.println("\033[0;32m" + "**YOU WIN**");
             grid.displayGrid();
             return true;
         }
-        return false;
-    }
 
-
-    private boolean isLoss() {
-
-        //Constant -> 2
-        if (grid.isCellContainsMine(x, y) && playerOption != 2) {
+        if (grid.isCellMine(x, y) && playerOption != FLAG_CELL_OPTION) {
             grid.displayBombs();
             return true;
         }
+
         return false;
     }
 

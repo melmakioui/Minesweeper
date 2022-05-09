@@ -5,11 +5,6 @@ import ProjecteMinesweeper.InputOutput.InputOutput;
 
 public class Cell {
 
-    private final char FLAG = 'F';
-    private final char SHOW = ' ';
-    private final char BOMB = 'X';
-    private final char HIDE = '-';
-
     private char cell;
     private boolean hided;
     private boolean flag;
@@ -56,7 +51,6 @@ public class Cell {
             hide();
     }
 
-    //Getters - Setters
     public boolean isHided() {
         return hided;
     }
@@ -77,20 +71,24 @@ public class Cell {
         return minesAround;
     }
 
+    public boolean isFlag(){
+        return this.flag;
+    }
+
     public void hide() {
-        this.cell = HIDE;
+        this.cell = '-';
     }
 
     public void bomb() {
-        this.cell = BOMB;
+        this.cell = 'X';
     }
 
     public void expose() {
-        this.cell = SHOW;
+        this.cell = ' ';
     }
 
     public void flag() {
-        this.cell = FLAG;
+        this.cell = 'F';
     }
 
     public char getCell() {
