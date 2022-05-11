@@ -1,7 +1,5 @@
 package ProjecteMinesweeper;
 
-import ProjecteMinesweeper.InputOutput.InputOutput;
-
 import java.util.Random;
 
 public class Grid {
@@ -9,13 +7,9 @@ public class Grid {
 
     private final int[][] adjacentXY = {
             {-1, 1, 0, 0, -1, -1, 1, 1},
-            {0, 0, -1, 1, -1, 1, -1, 1}
-    };
-
+            {0, 0, -1, 1, -1, 1, -1, 1}};
     private Cell cells[][];
-    private int showedCells;
     private int mines;
-
 
     public Grid(int length, int mines) {
         this.cells = new Cell[length][length];
@@ -46,12 +40,11 @@ public class Grid {
             x = randomMines.nextInt(cells.length - 1);
             y = randomMines.nextInt(cells[0].length - 1);
 
-            if (cells[x][y].isMine()) {
-                cells[x][y].toggleMine();
-                counter--;
+            if (cells[x][y].isMine())
                 continue;
-            }
-            cells[x][y].toggleMine();
+
+
+            cells[x][y].putMine();
             incrementNeighbours(x, y);
             counter++;
         }
@@ -83,26 +76,22 @@ public class Grid {
 
     public void showCell(int x, int y) {
 
-        if (isNotValidCoordinate(x, y)) {
+        if (isNotValidCoordinate(x, y))
             return;
-        }
 
-        if (cells[x][y].show()) {
+
+        if (cells[x][y].show())
             return;
-        }
 
-        for (int i = 0; i < 8; i++) {
+
+        for (int i = 0; i < 8; i++)
             showCell(x + adjacentXY[0][i], y + adjacentXY[1][i]);
-        }
+
     }
 
 
-    public void toggleFlag(int x, int y) {
-        if (cells[x][y].isVisible()){
-            InputOutput.displayAlreadyShowedCell();
-            return;
-        }
-        cells[x][y].toggleFlag();
+    public boolean toggleFlag(int x, int y) {
+        return cells[x][y].toggleFlag();
     }
 
 
@@ -124,30 +113,30 @@ public class Grid {
     }
 
 
-    public boolean isCellMine(int x, int y) {
+    public boolean isMineCell(int x, int y) {
         return cells[x][y].isMine();
     }
 
-    public boolean isCellVisible(int x, int y) {
+    public boolean isVisibleCell(int x, int y) {
         return cells[x][y].isVisible();
     }
 
-    public boolean isCellFlag(int x, int y) {
+    public boolean isFlagCell(int x, int y) {
         return cells[x][y].isFlag();
     }
 
     public int getVisibleCells() {
 
-        showedCells = 0;
+        int visibleCells = 0;
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
                 if (cells[i][j].isVisible()) {
-                    showedCells++;
+                    visibleCells++;
                 }
             }
         }
 
-        return showedCells;
+        return visibleCells;
     }
 
 }

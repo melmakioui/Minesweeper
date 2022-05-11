@@ -33,10 +33,18 @@ public class Game {
             playerOption = InputOutput.selectOption();
 
             switch (playerOption) {
-                case SHOW_CELL_OPTION -> validateCoordinates();
+                case SHOW_CELL_OPTION ->{
+                    selectCoordinates();
+                    if (isValidToShow()){
+                        grid.showCell(x, y);
+                    }
+
+                }
+
                 case FLAG_CELL_OPTION -> {
                     selectCoordinates();
-                    grid.toggleFlag(x, y);
+                    if (!grid.toggleFlag(x, y))
+                        InputOutput.dispalyVisibleCell();
                 }
             }
 
@@ -45,19 +53,18 @@ public class Game {
     }
 
 
-    private void validateCoordinates() {
+    private boolean isValidToShow() {
 
-        selectCoordinates();
+        if (grid.isFlagCell(x,y)){
+            InputOutput.displayIsFlagCell();
+            return false;
+        }
 
-        if (grid.isCellFlag(x,y)){
-            InputOutput.displayCellHasFlag();
-            return;
+        if (grid.isVisibleCell(x, y)) {
+            InputOutput.dispalyVisibleCell();
+            return false;
         }
-        if (grid.isCellVisible(x, y)) {
-            InputOutput.displayAlreadyShowedCell();
-            return;
-        }
-        grid.showCell(x, y);
+        return true;
     }
 
 
@@ -68,7 +75,7 @@ public class Game {
             return true;
         }
 
-        if (grid.isCellMine(x, y) && playerOption != FLAG_CELL_OPTION) {
+        if (grid.isMineCell(x, y) && playerOption != FLAG_CELL_OPTION) {
             System.out.println("**YOU LOSE**");
             grid.displayGrid();
             return true;

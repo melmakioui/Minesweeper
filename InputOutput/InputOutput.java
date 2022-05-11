@@ -79,12 +79,12 @@ public class InputOutput {
     }
 
 
-    public static void displayAlreadyShowedCell() {
+    public static void dispalyVisibleCell() {
         System.out.println("¡¡¡¡THIS CELL IS ALREADY VISIBLE!!!!");
 
     }
 
-    public static void displayCellHasFlag() {
+    public static void displayIsFlagCell() {
         System.out.println("¡¡¡¡THIS CELL HAS A FLAG, REMOVE FLAG !!!!");
 
     }

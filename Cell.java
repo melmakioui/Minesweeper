@@ -31,14 +31,18 @@ public class Cell {
         return false;
     }
 
-
-    public void toggleFlag() {
+    public boolean toggleFlag() {
 
         if (visible){
-            return;
+            return false;
         }
 
         flag = !flag;
+        return true;
+    }
+
+    public void putMine() {
+        this.mine = !mine;
     }
 
     public boolean isVisible() {
@@ -47,10 +51,6 @@ public class Cell {
 
     public boolean isMine() {
         return mine;
-    }
-
-    public void toggleMine() {
-        this.mine = !mine;
     }
 
     public void incrementCell() {
@@ -67,10 +67,10 @@ public class Cell {
 
     @Override
     public String toString() {
-        if (visible && getMinesAround() >= 1) return "[" + minesAround + "] ";
-        if (visible && isMine()) return "[*] ";
+        if (isVisible() && getMinesAround() >= 1) return "[" + minesAround + "] ";
+        if (isVisible() && isMine()) return "[*] ";
         if (isFlag()) return "[F] ";
-        if (visible) return "[ ] ";
+        if (isVisible()) return "[ ] ";
         return "[-] ";
     }
 }
