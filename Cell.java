@@ -1,19 +1,15 @@
 package ProjecteMinesweeper;
 
-
-import ProjecteMinesweeper.InputOutput.InputOutput;
-
 public class Cell {
 
-    private char cell;
-    private boolean hided;
+    private boolean visible;
     private boolean flag;
     private boolean mine;
     private int minesAround;
 
 
     public Cell() {
-        this.hided = false;
+        this.visible = false;
         this.flag = false;
         this.mine = false;
         this.minesAround = 0;
@@ -21,14 +17,13 @@ public class Cell {
 
     public boolean show() {
 
-        if (hided)
+        if (visible)
             return true;
 
         if (flag && !mine)
             flag = false;
 
-        hided = true;
-        expose();
+        visible = true;
 
         if (minesAround >= 1)
             return true;
@@ -39,20 +34,15 @@ public class Cell {
 
     public void toggleFlag() {
 
-        if (hided){
-            InputOutput.displayAlreadyShowedCell();
+        if (visible){
             return;
         }
 
         flag = !flag;
-        flag();
-
-        if (!flag)
-            hide();
     }
 
-    public boolean isHided() {
-        return hided;
+    public boolean isVisible() {
+        return visible;
     }
 
     public boolean isMine() {
@@ -75,27 +65,12 @@ public class Cell {
         return this.flag;
     }
 
-    public void hide() {
-        this.cell = '-';
-    }
-
-    public void bomb() {
-        this.cell = 'X';
-    }
-
-    public void expose() {
-        this.cell = ' ';
-    }
-
-    public void flag() {
-        this.cell = 'F';
-    }
-
-    public char getCell() {
-        return cell;
-    }
-
-    public void putMinesAround() {
-        this.cell = Character.forDigit(minesAround, 10);
+    @Override
+    public String toString() {
+        if (visible && getMinesAround() >= 1) return "[" + minesAround + "] ";
+        if (visible && isMine()) return "[*] ";
+        if (isFlag()) return "[F] ";
+        if (visible) return "[ ] ";
+        return "[-] ";
     }
 }

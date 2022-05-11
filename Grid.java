@@ -1,5 +1,7 @@
 package ProjecteMinesweeper;
 
+import ProjecteMinesweeper.InputOutput.InputOutput;
+
 import java.util.Random;
 
 public class Grid {
@@ -28,7 +30,6 @@ public class Grid {
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
                 cells[i][j] = new Cell();
-                cells[i][j].hide();
             }
         }
     }
@@ -63,7 +64,7 @@ public class Grid {
             if (isValidRow(x, dx))
                 for (int dy = -1; dy <= 1; dy++)
                     if (isValidColumn(x, y, dx, dy) && (!(dx == 0 && dy == 0)))
-                        if (!cells[x + dx][y + dy].isHided() && !cells[x + dx][y + dy].isMine())
+                        if (!cells[x + dx][y + dy].isVisible() && !cells[x + dx][y + dy].isMine())
                             cells[x + dx][y + dy].incrementCell();
     }
 
@@ -97,6 +98,10 @@ public class Grid {
 
 
     public void toggleFlag(int x, int y) {
+        if (cells[x][y].isVisible()){
+            InputOutput.displayAlreadyShowedCell();
+            return;
+        }
         cells[x][y].toggleFlag();
     }
 
@@ -112,28 +117,7 @@ public class Grid {
         for (int row = 0; row < cells.length; row++) {
             for (int col = 0; col < cells[0].length; col++) {
 
-                if (cells[row][col].isHided() && cells[row][col].getMinesAround() >= 1)
-                    cells[row][col].putMinesAround();
-
-                System.out.print("[" + cells[row][col].getCell() + "] ");
-
-            }
-            System.out.println();
-        }
-    }
-
-    public void displayBombs() {
-
-        System.out.println();
-        System.out.println("\033[0;31m" + "**YOU LOST**");
-
-        for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[0].length; j++) {
-
-                if (cells[i][j].isMine())
-                    cells[i][j].bomb();
-
-                System.out.print("[" + cells[i][j].getCell() + "] ");
+                System.out.print(cells[row][col]);
             }
             System.out.println();
         }
@@ -144,20 +128,20 @@ public class Grid {
         return cells[x][y].isMine();
     }
 
-    public boolean isCellShowed(int x, int y) {
-        return cells[x][y].isHided();
+    public boolean isCellVisible(int x, int y) {
+        return cells[x][y].isVisible();
     }
 
     public boolean isCellFlag(int x, int y) {
         return cells[x][y].isFlag();
     }
 
-    public int getShowedCells() {
+    public int getVisibleCells() {
 
         showedCells = 0;
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
-                if (cells[i][j].isHided()) {
+                if (cells[i][j].isVisible()) {
                     showedCells++;
                 }
             }

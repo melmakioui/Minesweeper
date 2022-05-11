@@ -53,7 +53,7 @@ public class Game {
             InputOutput.displayCellHasFlag();
             return;
         }
-        if (grid.isCellShowed(x, y)) {
+        if (grid.isCellVisible(x, y)) {
             InputOutput.displayAlreadyShowedCell();
             return;
         }
@@ -62,14 +62,15 @@ public class Game {
 
 
     private boolean isWinner() {
-        if (grid.getShowedCells() == EMPTY_CELLS) {
+        if (grid.getVisibleCells() == EMPTY_CELLS) {
             System.out.println("\033[0;32m" + "**YOU WIN**");
             grid.displayGrid();
             return true;
         }
 
         if (grid.isCellMine(x, y) && playerOption != FLAG_CELL_OPTION) {
-            grid.displayBombs();
+            System.out.println("**YOU LOSE**");
+            grid.displayGrid();
             return true;
         }
 

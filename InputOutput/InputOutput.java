@@ -80,7 +80,7 @@ public class InputOutput {
 
 
     public static void displayAlreadyShowedCell() {
-        System.out.println("¡¡¡¡THIS CELL IS ALREADY SHOWED!!!!");
+        System.out.println("¡¡¡¡THIS CELL IS ALREADY VISIBLE!!!!");
 
     }
 
