@@ -67,8 +67,8 @@ public class Cell {
 
     @Override
     public String toString() {
-        if (isVisible() && getMinesAround() >= 1) return "[" + minesAround + "] ";
         if (isVisible() && isMine()) return "[*] ";
+        if (isVisible() && getMinesAround() >= 1) return "[" + minesAround + "] ";
         if (isFlag()) return "[F] ";
         if (isVisible()) return "[ ] ";
         return "[-] ";

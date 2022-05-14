@@ -76,7 +76,7 @@ public class Game {
         }
 
         if (grid.isMineCell(x, y) && playerOption != FLAG_CELL_OPTION) {
-            System.out.println("**YOU LOSE**");
+            System.out.println("\033[0;31m" + "**YOU LOSE**");
             grid.displayGrid();
             return true;
         }
